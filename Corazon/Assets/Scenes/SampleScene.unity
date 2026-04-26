@@ -5095,7 +5095,6 @@ GameObject:
   - component: {fileID: 639616985}
   - component: {fileID: 639616984}
   - component: {fileID: 639616983}
-  - component: {fileID: 639616986}
   m_Layer: 0
   m_Name: Pared1
   m_TagString: Untagged
@@ -5164,7 +5163,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 1405415802e4480499ec75704cacd80d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5196,19 +5195,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 639616981}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &639616986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 639616981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52e0b049904aa584f8a25f0bbf2318a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
-  defaultColor: {r: 0.76470596, g: 0.7019608, b: 0.6, a: 0}
 --- !u!1 &641893117
 GameObject:
   m_ObjectHideFlags: 0
@@ -7961,7 +7947,6 @@ GameObject:
   - component: {fileID: 892635288}
   - component: {fileID: 892635287}
   - component: {fileID: 892635286}
-  - component: {fileID: 892635289}
   m_Layer: 0
   m_Name: Pared2
   m_TagString: Untagged
@@ -8030,7 +8015,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 1405415802e4480499ec75704cacd80d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8062,19 +8047,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 892635284}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &892635289
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 892635284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52e0b049904aa584f8a25f0bbf2318a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
-  defaultColor: {r: 0.7803922, g: 0.7176471, b: 0.6156863, a: 0}
 --- !u!1 &894369180
 GameObject:
   m_ObjectHideFlags: 0
@@ -8668,7 +8640,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Teletransportacion
   Target: {fileID: 1489220637}
-  offsetFrente: 10
+  ThePlayer: {fileID: 1248723725}
 --- !u!114 &995560153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8771,8 +8743,6 @@ GameObject:
   - component: {fileID: 1000370871}
   - component: {fileID: 1000370874}
   - component: {fileID: 1000370873}
-  - component: {fileID: 1000370872}
-  - component: {fileID: 1000370875}
   m_Layer: 0
   m_Name: Pared4
   m_TagString: Untagged
@@ -8795,27 +8765,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1041167506}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
---- !u!65 &1000370872
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000370870}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1000370873
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8841,7 +8790,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 1405415802e4480499ec75704cacd80d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8873,19 +8822,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000370870}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1000370875
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000370870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52e0b049904aa584f8a25f0bbf2318a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
-  defaultColor: {r: 0.227451, g: 0.27450982, b: 0.19215688, a: 0}
 --- !u!1 &1005036157
 GameObject:
   m_ObjectHideFlags: 0
@@ -10883,6 +10819,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1225964133}
   m_CullTransparentMesh: 1
+--- !u!1 &1248723725 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8806329115733545877, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+  m_PrefabInstance: {fileID: 1373153106}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1255638673
 GameObject:
   m_ObjectHideFlags: 0
@@ -12284,7 +12225,6 @@ GameObject:
   - component: {fileID: 1450747630}
   - component: {fileID: 1450747629}
   - component: {fileID: 1450747628}
-  - component: {fileID: 1450747627}
   m_Layer: 0
   m_Name: Pared2 (1)
   m_TagString: Untagged
@@ -12307,19 +12247,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1041167506}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
---- !u!114 &1450747627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1450747625}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52e0b049904aa584f8a25f0bbf2318a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
-  defaultColor: {r: 0.7803922, g: 0.7176471, b: 0.6156863, a: 0}
 --- !u!65 &1450747628
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12366,7 +12293,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 1405415802e4480499ec75704cacd80d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12883,7 +12810,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Teletransportacion
   Target: {fileID: 995560151}
-  offsetFrente: 10
+  ThePlayer: {fileID: 0}
 --- !u!1 &1493885289
 GameObject:
   m_ObjectHideFlags: 0
@@ -13968,7 +13895,6 @@ GameObject:
   - component: {fileID: 1615747189}
   - component: {fileID: 1615747188}
   - component: {fileID: 1615747187}
-  - component: {fileID: 1615747186}
   m_Layer: 0
   m_Name: Pared3
   m_TagString: Untagged
@@ -13991,19 +13917,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1041167506}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!114 &1615747186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1615747184}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52e0b049904aa584f8a25f0bbf2318a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
-  defaultColor: {r: 0.76470596, g: 0.7019608, b: 0.6039216, a: 1}
 --- !u!65 &1615747187
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14050,7 +13963,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 939de393500e7e3418161ac3feb6b9c2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
