@@ -32,7 +32,7 @@ public class WallObject : MonoBehaviour
     private void OnGrabbed(SelectEnterEventArgs args)
     {
         // Al agarrar: XRI maneja la posición, pero liberamos constraints
-        rb.isKinematic = true;        // XRI necesita esto mientras se agarra
+        rb.isKinematic = false;        // XRI necesita esto mientras se agarra
         rb.constraints = RigidbodyConstraints.None;
     }
 
