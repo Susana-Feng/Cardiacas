@@ -9,7 +9,10 @@ public class Clasificacion : MonoBehaviour
     public ParticleSystem particles;
 
     [Header("Rebote")]
-    public float bounceForce = 5f;
+    public float bounceForce = 6f;
+
+    [Header("Destrucción")]
+    public float destroyDelay = 0.5f;
 
     private void Awake()
     {
@@ -33,17 +36,17 @@ public class Clasificacion : MonoBehaviour
 
         particles.Play();
 
-        if (!IsValidObject(other.gameObject))
+        if (IsValidObject(other.gameObject))
+        {
+            Destroy(other.gameObject, destroyDelay);
+        }
+        else
         {
             Rigidbody rb = other.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                // Dirección de rebote: desde el centro del área hacia el objeto
                 Vector3 bounceDirection = (other.transform.position - transform.position).normalized;
-
-                // Asegurarse que el objeto no esté kinematic momentáneamente
                 rb.isKinematic = false;
-
                 rb.linearVelocity = Vector3.zero;
                 rb.AddForce(bounceDirection * bounceForce, ForceMode.Impulse);
             }
@@ -64,4 +67,3 @@ public class Clasificacion : MonoBehaviour
         return false;
     }
 }
-
