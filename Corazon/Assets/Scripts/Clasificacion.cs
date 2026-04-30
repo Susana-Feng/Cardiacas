@@ -14,11 +14,16 @@ public class Clasificacion : MonoBehaviour
     [Header("Destrucción")]
     public float destroyDelay = 0.5f;
 
+    [Header("Win Condition")]
+    public int requiredCount = 3;
+
+    private int validCount = 0;
+    private bool isFull = false;
+
     private void Awake()
     {
         if (particles == null)
             particles = GetComponent<ParticleSystem>();
-
         if (particles != null)
             particles.Stop();
     }
@@ -27,17 +32,25 @@ public class Clasificacion : MonoBehaviour
     {
         if (particles == null) return;
 
-        Color particleColor = IsValidObject(other.gameObject) ? Color.green : Color.red;
+        bool valid = IsValidObject(other.gameObject);
 
+        Color particleColor = valid ? Color.green : Color.red;
         var main = particles.main;
         main.startColor = particleColor;
-        //main.duration = 2f;
         main.loop = false;
-
         particles.Play();
 
-        if (IsValidObject(other.gameObject))
+        if (valid)
         {
+            validCount++;
+
+            // Check if this container just became full
+            if (!isFull && validCount >= requiredCount)
+            {
+                isFull = true;
+                GameManager.Instance.OnContainerFilled();
+            }
+
             Destroy(other.gameObject, destroyDelay);
         }
         else
@@ -51,11 +64,6 @@ public class Clasificacion : MonoBehaviour
                 rb.AddForce(bounceDirection * bounceForce, ForceMode.Impulse);
             }
         }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        // Las partículas duran 2 segundos y se apagan solas
     }
 
     private bool IsValidObject(GameObject obj)
