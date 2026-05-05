@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2c83bc9734c2d344cb81829f38a73a8b
+guid: 8f4725b1012c1074d9d9dacba40a6a7b
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -7,8 +7,33 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: WallClock3
-    second: {fileID: 2100000, guid: 7f64f37d82dbef345a759cdab55de7ac, type: 2}
+      name: Clock
+    second: {fileID: 2100000, guid: 59d6b95fe82f61d41a23aa9120629f4b, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Clock_LP_DefaultMaterial_BaseColor
+    second: {fileID: 2800000, guid: ad4725d332d4ab343a32a6d7baedf5fc, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Clock_LP_DefaultMaterial_Metallic
+    second: {fileID: 2800000, guid: ce6ebf9a3bd684c49b4660773257f197, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Clock_LP_DefaultMaterial_Normal
+    second: {fileID: 2800000, guid: 6e6c303248865f447a3a1f6df25cbdb6, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Clock_LP_DefaultMaterial_Opacity
+    second: {fileID: 2800000, guid: 58d4f7406522c954f9a73263da23e914, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Clock_LP_DefaultMaterial_Roughness
+    second: {fileID: 2800000, guid: 9bd1b3c093fb2ad43b1f7610dbec952f, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
