@@ -1,72 +1,40 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 public class LanzadorObjetos : MonoBehaviour
 {
-    [Header("Configuración de lanzamiento")]
-    public List<GameObject> objetos;       // Lista de objetos a lanzar
-    public float intervalo = 2f;           // Tiempo fijo entre lanzamientos
-    public float velocidadLanzamiento = 5f; // Velocidad inicial hacia arriba
-    public float alturaMaxima = 5f;        // Altura máxima (para referencia visual)
+    [Header("Configuración")]
+    public float velocidad = 5f;
+    public float intervalo = 1f;
 
-    private int indiceActual = 0;
-    private float tiempoUltimoLanzamiento;
+    private Rigidbody rb;
+    private Vector3 posicionInicial;
+    private float timer = 0f;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        posicionInicial = transform.position;
+    }
 
     void Update()
     {
-        // Lanzar objetos en intervalos fijos
-        if (Time.time - tiempoUltimoLanzamiento >= intervalo && objetos.Count > 0)
-        {
-            LanzarObjeto();
-            tiempoUltimoLanzamiento = Time.time;
-        }
+        timer += Time.deltaTime;
 
-        // Control de visibilidad según posición Y
-        foreach (var obj in objetos)
+        if (timer >= intervalo)
         {
-            if (obj != null)
-            {
-                Renderer rend = obj.GetComponent<Renderer>();
-                if (rend != null)
-                {
-                    if (obj.transform.position.y <= 0.2f)
-                        rend.enabled = false; // invisible
-                    else
-                        rend.enabled = true;  // visible
-                }
-            }
+            timer = 0f;
+            Relanzar();
         }
     }
 
-    void LanzarObjeto()
+    void Relanzar()
     {
-        GameObject obj = objetos[indiceActual];
-        if (obj != null)
-        {
-            Rigidbody rb = obj.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                // Reset posición al suelo
-                obj.transform.position = new Vector3(transform.position.x, 0.2f, transform.position.z);
-                rb.linearVelocity = Vector3.zero;
+        // Resetear posición y velocidad
+        transform.position = posicionInicial;
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
 
-                // Aplicar fuerza vertical
-                rb.AddForce(Vector3.up * velocidadLanzamiento, ForceMode.VelocityChange);
-            }
-        }
-
-        // Avanzar al siguiente objeto en la lista
-        indiceActual = (indiceActual + 1) % objetos.Count;
-    }
-
-    // Método para destruir cuando el objeto es agarrado
-    public void DestruirObjeto(GameObject obj)
-    {
-        if (objetos.Contains(obj))
-        {
-            objetos.Remove(obj);
-            Destroy(obj);
-        }
+        // Lanzar hacia arriba
+        rb.AddForce(Vector3.up * velocidad, ForceMode.VelocityChange);
     }
 }
-
