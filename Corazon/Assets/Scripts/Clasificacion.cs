@@ -8,6 +8,15 @@ public class Clasificacion : MonoBehaviour
     [Header("Particle System")]
     public ParticleSystem particles;
 
+    [Header("Sonidos")]
+    public AudioSource audioSource; // fuente de audio
+    public AudioClip validSound;    // sonido para objeto correcto
+    public AudioClip invalidSound;  // sonido para objeto incorrecto
+
+    [Header("Efecto de luz (solo válidos)")]
+    public Light pointLight;        // referencia al Point Light
+    public float lightDuration = 1f; // tiempo que dura encendido
+
     [Header("Rebote")]
     public float bounceForce = 6f;
 
@@ -26,22 +35,40 @@ public class Clasificacion : MonoBehaviour
             particles = GetComponent<ParticleSystem>();
         if (particles != null)
             particles.Stop();
+
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+
+        if (pointLight != null)
+            pointLight.gameObject.SetActive(false); // luz apagada al inicio
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (particles == null) return;
-
         bool valid = IsValidObject(other.gameObject);
-
-        Color particleColor = valid ? Color.green : Color.red;
-        var main = particles.main;
-        main.startColor = particleColor;
-        main.loop = false;
-        particles.Play();
 
         if (valid)
         {
+            // Partículas solo para objetos válidos
+            if (particles != null)
+            {
+                var main = particles.main;
+                main.loop = false;
+                particles.Play();
+            }
+
+            // Sonido de objeto válido
+            if (audioSource != null && validSound != null)
+                audioSource.PlayOneShot(validSound);
+
+            // Luz de objeto válido
+            if (pointLight != null)
+            {
+                pointLight.gameObject.SetActive(true);
+                CancelInvoke(nameof(DisableLight));
+                Invoke(nameof(DisableLight), lightDuration);
+            }
+
             validCount++;
 
             // Check if this container just became full
@@ -55,6 +82,10 @@ public class Clasificacion : MonoBehaviour
         }
         else
         {
+            // Sonido de objeto inválido
+            if (audioSource != null && invalidSound != null)
+                audioSource.PlayOneShot(invalidSound);
+
             Rigidbody rb = other.GetComponent<Rigidbody>();
             if (rb != null)
             {
@@ -64,6 +95,12 @@ public class Clasificacion : MonoBehaviour
                 rb.AddForce(bounceDirection * bounceForce, ForceMode.Impulse);
             }
         }
+    }
+
+    private void DisableLight()
+    {
+        if (pointLight != null)
+            pointLight.gameObject.SetActive(false);
     }
 
     private bool IsValidObject(GameObject obj)

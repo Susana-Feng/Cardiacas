@@ -1,14 +1,10 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
-public class LanzadorObjetos : MonoBehaviour
+public class LanzadorTutorial : MonoBehaviour
 {
     [Header("Configuración")]
     public float velocidad = 5f;
     public float intervalo = 1f;
-
-    [Header("Altura de lanzamiento")]
-    public float altura = 1f; // configurable desde el inspector
 
     [Header("Objetos a lanzar")]
     public GameObject[] objetos; // lista de objetos
@@ -24,7 +20,6 @@ public class LanzadorObjetos : MonoBehaviour
         for (int i = 0; i < objetos.Length; i++)
         {
             posicionesIniciales[i] = objetos[i].transform.position;
-            objetos[i].SetActive(false); // desactivar al inicio
         }
     }
 
@@ -42,33 +37,20 @@ public class LanzadorObjetos : MonoBehaviour
     void Relanzar()
     {
         GameObject objeto = objetos[indiceActual];
-        if (objeto == null) return; // seguridad
-
         Rigidbody rb = objeto.GetComponent<Rigidbody>();
 
         if (rb != null)
         {
-            // Activar el objeto y resetear posición
-            objeto.SetActive(true);
+            // Resetear posición a la original
             objeto.transform.position = posicionesIniciales[indiceActual];
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
 
-            // Lanzar hacia arriba hasta la altura deseada
-            float fuerza = Mathf.Sqrt(2f * Physics.gravity.magnitude * altura);
-            rb.AddForce(Vector3.up * fuerza, ForceMode.VelocityChange);
+            // Lanzar hacia arriba
+            rb.AddForce(Vector3.up * velocidad, ForceMode.VelocityChange);
         }
 
         // Avanzar al siguiente objeto en la lista
         indiceActual = (indiceActual + 1) % objetos.Length;
-    }
-
-    // Método para cuando el objeto sea agarrado
-    public void OnGrabbed(SelectEnterEventArgs args)
-    {
-        GameObject grabbedObject = args.interactableObject.transform.gameObject;
-
-        // En vez de destruir, lo desactivamos
-        grabbedObject.SetActive(false);
     }
 }
