@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace Unity.VRTemplate
 {
     /// <summary>
-    /// Controls the steps in the in coaching card.
+    /// Controls the steps in the coaching card.
     /// </summary>
     public class TutoManager : MonoBehaviour
     {
@@ -34,6 +34,10 @@ namespace Unity.VRTemplate
         [Header("Object to destroy on second button press")]
         [SerializeField]
         GameObject m_ObjectToDestroy;
+
+        [Header("Optional object to activate on second button press")]
+        [SerializeField]
+        GameObject m_ObjectToActivate;
 
         int m_CurrentStepIndex = 0;
 
@@ -74,6 +78,12 @@ namespace Unity.VRTemplate
             else
             {
                 Debug.LogWarning("m_ObjectToDestroy no está asignado.");
+            }
+
+            if (m_ObjectToActivate != null)
+            {
+                m_ObjectToActivate.SetActive(true);
+                Debug.Log($"Objeto activado: {m_ObjectToActivate.name}");
             }
         }
 
