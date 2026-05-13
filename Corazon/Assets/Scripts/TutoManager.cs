@@ -39,6 +39,9 @@ namespace Unity.VRTemplate
         [SerializeField]
         GameObject m_ObjectToActivate;
 
+        // Referencia al segundo script desde el Inspector
+        public LanzadorTutorial lanzadorTutorial;
+
         int m_CurrentStepIndex = 0;
 
         void Start()
@@ -84,6 +87,21 @@ namespace Unity.VRTemplate
             {
                 m_ObjectToActivate.SetActive(true);
                 Debug.Log($"Objeto activado: {m_ObjectToActivate.name}");
+            }
+        }
+
+        public void OnIniciarButtonPressed()
+        {
+            Debug.Log("Iniciar button pressed - iniciando partida de prueba");
+
+            // Verificamos que el segundo script esté asignado
+            if (lanzadorTutorial != null)
+            {
+                lanzadorTutorial.Relanzar(); // Llamada al método público del segundo script
+            }
+            else
+            {
+                Debug.LogWarning("No se asignó el SegundoScript en el Inspector.");
             }
         }
 
