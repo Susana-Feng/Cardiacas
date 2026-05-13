@@ -4266,7 +4266,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 12
   m_Type: 2
-  m_Color: {r: 0, g: 0.56078434, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 0.3529412, a: 1}
   m_Intensity: 20
   m_Range: 1
   m_SpotAngle: 30
@@ -11152,7 +11152,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 12
   m_Type: 2
-  m_Color: {r: 0, g: 0.56078434, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 0.3529412, a: 1}
   m_Intensity: 20
   m_Range: 1
   m_SpotAngle: 30
@@ -60125,6 +60125,8 @@ MonoBehaviour:
   invalidSound: {fileID: 0}
   pointLight: {fileID: 132309194}
   lightDuration: 1
+  validLightColor: {r: 1, g: 1, b: 0.3529412, a: 1}
+  invalidLightColor: {r: 1, g: 0, b: 0, a: 1}
   bounceForce: 6
   destroyDelay: 0
   requiredCount: 3
@@ -65129,6 +65131,8 @@ MonoBehaviour:
   invalidSound: {fileID: 0}
   pointLight: {fileID: 307429436}
   lightDuration: 1
+  validLightColor: {r: 1, g: 1, b: 0.3529412, a: 1}
+  invalidLightColor: {r: 1, g: 0, b: 0, a: 1}
   bounceForce: 6
   destroyDelay: 0
   requiredCount: 3

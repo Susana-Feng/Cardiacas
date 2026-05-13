@@ -13,9 +13,11 @@ public class Clasificacion : MonoBehaviour
     public AudioClip validSound;    // sonido para objeto correcto
     public AudioClip invalidSound;  // sonido para objeto incorrecto
 
-    [Header("Efecto de luz (solo válidos)")]
+    [Header("Efecto de luz")]
     public Light pointLight;        // referencia al Point Light
     public float lightDuration = 1f; // tiempo que dura encendido
+    public Color validLightColor = Color.yellow; // color para objeto válido
+    public Color invalidLightColor = Color.red;  // color para objeto inválido
 
     [Header("Rebote")]
     public float bounceForce = 6f;
@@ -61,9 +63,10 @@ public class Clasificacion : MonoBehaviour
             if (audioSource != null && validSound != null)
                 audioSource.PlayOneShot(validSound);
 
-            // Luz de objeto válido
+            // Luz de objeto válido (amarillo configurable)
             if (pointLight != null)
             {
+                pointLight.color = validLightColor;
                 pointLight.gameObject.SetActive(true);
                 CancelInvoke(nameof(DisableLight));
                 Invoke(nameof(DisableLight), lightDuration);
@@ -85,6 +88,15 @@ public class Clasificacion : MonoBehaviour
             // Sonido de objeto inválido
             if (audioSource != null && invalidSound != null)
                 audioSource.PlayOneShot(invalidSound);
+
+            // Luz de objeto inválido (rojo configurable)
+            if (pointLight != null)
+            {
+                pointLight.color = invalidLightColor;
+                pointLight.gameObject.SetActive(true);
+                CancelInvoke(nameof(DisableLight));
+                Invoke(nameof(DisableLight), lightDuration);
+            }
 
             Rigidbody rb = other.GetComponent<Rigidbody>();
             if (rb != null)
@@ -112,3 +124,4 @@ public class Clasificacion : MonoBehaviour
         return false;
     }
 }
+
