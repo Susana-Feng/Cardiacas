@@ -37,8 +37,9 @@ namespace Unity.VRTemplate
 
         [Header("Optional object to activate on second button press")]
         [SerializeField]
-        GameObject m_ObjectToActivate;
+        GameObject[] m_ObjectsToActivate;
 
+        [Header("Script opcional a inicializar")]
         // Referencia al segundo script desde el Inspector
         public LanzadorTutorial lanzadorTutorial;
 
@@ -83,10 +84,20 @@ namespace Unity.VRTemplate
                 Debug.LogWarning("m_ObjectToDestroy no está asignado.");
             }
 
-            if (m_ObjectToActivate != null)
+            if (m_ObjectsToActivate != null && m_ObjectsToActivate.Length > 0)
             {
-                m_ObjectToActivate.SetActive(true);
-                Debug.Log($"Objeto activado: {m_ObjectToActivate.name}");
+                foreach (GameObject obj in m_ObjectsToActivate)
+                {
+                    if (obj != null)
+                    {
+                        obj.SetActive(true);
+                        Debug.Log($"Objeto activado: {obj.name}");
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("No se asignaron objetos en la lista m_ObjectsToActivate.");
             }
         }
 

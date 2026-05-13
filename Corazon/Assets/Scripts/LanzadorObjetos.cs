@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class LanzadorObjetos : MonoBehaviour
@@ -15,7 +16,6 @@ public class LanzadorObjetos : MonoBehaviour
 
     private Vector3[] posicionesIniciales; // posiciones originales
     private int indiceActual = 0;
-    private float timer = 0f;
 
     void Start()
     {
@@ -24,43 +24,43 @@ public class LanzadorObjetos : MonoBehaviour
         for (int i = 0; i < objetos.Length; i++)
         {
             posicionesIniciales[i] = objetos[i].transform.position;
-            objetos[i].SetActive(false); // desactivar al inicio
+            //objetos[i].SetActive(false); // desactivar al inicio si quieres
         }
     }
 
-    void Update()
+    // Método público que puedes llamar desde un botón
+    public void Relanzar()
     {
-        timer += Time.deltaTime;
-
-        if (timer >= intervalo && objetos.Length > 0)
-        {
-            timer = 0f;
-            Relanzar();
-        }
+        // Inicia la corutina que lanza todos los objetos uno por uno
+        StartCoroutine(LanzarTodos());
     }
 
-    void Relanzar()
+    private IEnumerator LanzarTodos()
     {
-        GameObject objeto = objetos[indiceActual];
-        if (objeto == null) return; // seguridad
-
-        Rigidbody rb = objeto.GetComponent<Rigidbody>();
-
-        if (rb != null)
+        // Recorre todos los objetos en la lista
+        for (int i = 0; i < objetos.Length; i++)
         {
-            // Activar el objeto y resetear posición
-            objeto.SetActive(true);
-            objeto.transform.position = posicionesIniciales[indiceActual];
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+            GameObject objeto = objetos[i];
+            if (objeto == null) continue;
 
-            // Lanzar hacia arriba hasta la altura deseada
-            float fuerza = Mathf.Sqrt(2f * Physics.gravity.magnitude * altura);
-            rb.AddForce(Vector3.up * fuerza, ForceMode.VelocityChange);
+            Rigidbody rb = objeto.GetComponent<Rigidbody>();
+
+            if (rb != null)
+            {
+                // Activar el objeto y resetear posición
+                objeto.SetActive(true);
+                objeto.transform.position = posicionesIniciales[i];
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+
+                // Lanzar hacia arriba hasta la altura deseada
+                float fuerza = Mathf.Sqrt(2f * Physics.gravity.magnitude * altura);
+                rb.AddForce(Vector3.up * fuerza, ForceMode.VelocityChange);
+            }
+
+            // Espera el intervalo antes de lanzar el siguiente
+            yield return new WaitForSeconds(intervalo);
         }
-
-        // Avanzar al siguiente objeto en la lista
-        indiceActual = (indiceActual + 1) % objetos.Length;
     }
 
     // Método para cuando el objeto sea agarrado
