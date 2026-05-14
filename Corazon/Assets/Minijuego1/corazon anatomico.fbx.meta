@@ -1,9 +1,34 @@
 fileFormatVersion: 2
-guid: 833c66697b1f4e54b9225a407db6ceeb
+guid: 4954cf1d074792342bb81f04d3e5bc65
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Azul oscuro
+    second: {fileID: 2100000, guid: ce8d70798a699a24b8b3c8d869c2d503, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Celeste
+    second: {fileID: 2100000, guid: 590f13a9f2593a843b474d5f6e908864, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.002
+    second: {fileID: 2100000, guid: df3034eea03fe434dac2ed7d89e9d957, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rojo claro
+    second: {fileID: 2100000, guid: 14be4fced6091de4296ac4714705d7e8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rojo oscuro
+    second: {fileID: 2100000, guid: 1029b940bd65dc6479a6cf8841534820, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
