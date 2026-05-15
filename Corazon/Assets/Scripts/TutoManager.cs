@@ -39,9 +39,13 @@ namespace Unity.VRTemplate
         [SerializeField]
         GameObject[] m_ObjectsToActivate;
 
-        [Header("Script opcional a inicializar")]
+        [Header("Script opcional a inicializar tuto")]
         // Referencia al segundo script desde el Inspector
         public LanzadorTutorial lanzadorTutorial;
+
+        [Header("Script opcional partida")]
+        // Referencia al segundo script desde el Inspector
+        public LanzadorObjetos lanzadorObjetos;
 
         int m_CurrentStepIndex = 0;
 
@@ -105,10 +109,24 @@ namespace Unity.VRTemplate
         {
             Debug.Log("Iniciar button pressed - iniciando partida de prueba");
 
+            if (m_ObjectToDestroy != null)
+            {
+                Destroy(m_ObjectToDestroy);
+                Debug.Log($"Objeto destruido: {m_ObjectToDestroy.name}");
+            }
+            else
+            {
+                Debug.LogWarning("m_ObjectToDestroy no está asignado.");
+            }
+
             // Verificamos que el segundo script esté asignado
             if (lanzadorTutorial != null)
             {
                 lanzadorTutorial.Relanzar(); // Llamada al método público del segundo script
+            }
+            else if (lanzadorObjetos != null)
+            {
+                lanzadorObjetos.Relanzar(); // Llamada al método público del segundo script
             }
             else
             {
