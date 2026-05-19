@@ -134,6 +134,25 @@ namespace Unity.VRTemplate
             }
         }
 
+        public void OnIniciarButtonPressed2()
+        {
+            Debug.Log("Iniciar button pressed - iniciando partida de prueba");
+
+            // Verificamos que el segundo script esté asignado
+            if (lanzadorTutorial != null)
+            {
+                lanzadorTutorial.Relanzar(); // Llamada al método público del segundo script
+            }
+            else if (lanzadorObjetos != null)
+            {
+                lanzadorObjetos.Relanzar(); // Llamada al método público del segundo script
+            }
+            else
+            {
+                Debug.LogWarning("No se asignó el SegundoScript en el Inspector.");
+            }
+        }
+
         void SetSecondButtonVisible(bool visible)
         {
             if (m_SecondButton == null)

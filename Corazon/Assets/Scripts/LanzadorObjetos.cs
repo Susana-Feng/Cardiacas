@@ -14,6 +14,9 @@ public class LanzadorObjetos : MonoBehaviour
     [Header("Objetos a lanzar")]
     public GameObject[] objetos; // lista de objetos
 
+    [Header("Prefab de explosión")]
+    public GameObject explosionPrefab; // asigna aquí tu efecto de partículas
+
     private Vector3[] posicionesIniciales; // posiciones originales
     private int indiceActual = 0;
 
@@ -69,6 +72,20 @@ public class LanzadorObjetos : MonoBehaviour
         GameObject grabbedObject = args.interactableObject.transform.gameObject;
 
         // En vez de destruir, lo desactivamos
+        grabbedObject.SetActive(false);
+    }
+
+    public void OnGrabbedExplosion(SelectEnterEventArgs args)
+    {
+        GameObject grabbedObject = args.interactableObject.transform.gameObject;
+
+        // Instanciar la explosión en la posición del objeto
+        if (explosionPrefab != null)
+        {
+            Instantiate(explosionPrefab, grabbedObject.transform.position, Quaternion.identity);
+        }
+
+        // Desactivar el objeto
         grabbedObject.SetActive(false);
     }
 }
