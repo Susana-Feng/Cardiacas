@@ -25,6 +25,9 @@ public class LanzadorTutorial : MonoBehaviour
     [Header("Componentes a activar cuando el objeto 2 se desactive")]
     public GameObject[] componentesAActivar;
 
+    [Header("Efecto de confetti")]
+    public GameObject confettiEffect;
+
     private Vector3[] posicionesIniciales;
     private bool objeto1Desactivado = false;
 
@@ -165,5 +168,32 @@ public class LanzadorTutorial : MonoBehaviour
         }
 
         grabbedObject.SetActive(false);
+    }
+
+    public void OnGrabbedCorrecto(SelectEnterEventArgs args)
+    {
+        GameObject grabbedObject = args.interactableObject.transform.gameObject;
+
+        if (confettiEffect != null)
+        {
+            // Mover el efecto a la posición del objeto
+            confettiEffect.transform.position = grabbedObject.transform.position;
+
+            // Activar el efecto
+            confettiEffect.SetActive(true);
+
+            // Desactivarlo cuando termine la partícula
+            ParticleSystem ps = confettiEffect.GetComponent<ParticleSystem>();
+            if (ps != null)
+                StartCoroutine(DesactivarEfectoConfetti(ps.main.duration));
+        }
+
+        grabbedObject.SetActive(false);
+    }
+
+    private IEnumerator DesactivarEfectoConfetti(float tiempo)
+    {
+        yield return new WaitForSeconds(tiempo);
+        confettiEffect.SetActive(false);
     }
 }

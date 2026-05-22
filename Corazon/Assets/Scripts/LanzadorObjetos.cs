@@ -14,8 +14,12 @@ public class LanzadorObjetos : MonoBehaviour
     [Header("Objetos a lanzar")]
     public GameObject[] objetos; // lista de objetos
 
-    [Header("Prefab de explosión")]
-    public GameObject explosionPrefab; // asigna aquí tu efecto de partículas
+    [Header("Efecto de explosión")]
+    public GameObject explosionEffect; // el objeto de partículas ya en la escena, desactivado
+    [Header("Efecto de humo")]
+    public GameObject smokeEffect;
+    [Header("Efecto de confetti")]
+    public GameObject confettiEffect;
 
     private Vector3[] posicionesIniciales; // posiciones originales
     private int indiceActual = 0;
@@ -79,13 +83,85 @@ public class LanzadorObjetos : MonoBehaviour
     {
         GameObject grabbedObject = args.interactableObject.transform.gameObject;
 
-        // Instanciar la explosión en la posición del objeto
-        if (explosionPrefab != null)
+        if (explosionEffect != null)
         {
-            Instantiate(explosionPrefab, grabbedObject.transform.position, Quaternion.identity);
+            // Mover el efecto a la posición del objeto
+            explosionEffect.transform.position = grabbedObject.transform.position;
+
+            // Activar el efecto
+            explosionEffect.SetActive(true);
+
+            // Desactivarlo cuando termine la partícula
+            ParticleSystem ps = explosionEffect.GetComponent<ParticleSystem>();
+            if (ps != null)
+                StartCoroutine(DesactivarEfecto(ps.main.duration));
         }
 
-        // Desactivar el objeto
         grabbedObject.SetActive(false);
+    }
+
+    private IEnumerator DesactivarEfecto(float tiempo)
+    {
+        yield return new WaitForSeconds(tiempo);
+        explosionEffect.SetActive(false);
+    }
+
+    //
+    public void OnGrabbedExplosionSmoke(SelectEnterEventArgs args)
+    {
+        GameObject grabbedObject = args.interactableObject.transform.gameObject;
+
+        if (explosionEffect != null && smokeEffect != null)
+        {
+            // Mover el efecto a la posición del objeto
+            explosionEffect.transform.position = grabbedObject.transform.position;
+            smokeEffect.transform.position = grabbedObject.transform.position;
+
+            // Activar el efecto
+            explosionEffect.SetActive(true);
+            smokeEffect.SetActive(true);
+
+            // Desactivarlo cuando termine la partícula
+            ParticleSystem ps = explosionEffect.GetComponent<ParticleSystem>();
+            ParticleSystem psSmoke = smokeEffect.GetComponent<ParticleSystem>();
+            if (ps != null && psSmoke != null)
+                StartCoroutine(DesactivarEfecto2(ps.main.duration));
+        }
+
+        grabbedObject.SetActive(false);
+    }
+
+    private IEnumerator DesactivarEfecto2(float tiempo)
+    {
+        yield return new WaitForSeconds(tiempo);
+        explosionEffect.SetActive(false);
+        smokeEffect.SetActive(false);
+    }
+
+    public void OnGrabbedCorrecto(SelectEnterEventArgs args)
+    {
+        GameObject grabbedObject = args.interactableObject.transform.gameObject;
+
+        if (confettiEffect != null)
+        {
+            // Mover el efecto a la posición del objeto
+            confettiEffect.transform.position = grabbedObject.transform.position;
+
+            // Activar el efecto
+            confettiEffect.SetActive(true);
+
+            // Desactivarlo cuando termine la partícula
+            ParticleSystem ps = confettiEffect.GetComponent<ParticleSystem>();
+            if (ps != null)
+                StartCoroutine(DesactivarEfectoConfetti(ps.main.duration));
+        }
+
+        grabbedObject.SetActive(false);
+    }
+
+    private IEnumerator DesactivarEfectoConfetti(float tiempo)
+    {
+        yield return new WaitForSeconds(tiempo);
+        confettiEffect.SetActive(false);
     }
 }
