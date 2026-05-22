@@ -188,6 +188,11 @@ public class LanzadorTutorial : MonoBehaviour
                 StartCoroutine(DesactivarEfectoConfetti(ps.main.duration));
         }
 
+        if (objetos.Length > 0 && grabbedObject == objetos[0])
+        {
+            objeto1Desactivado = true;
+        }
+
         grabbedObject.SetActive(false);
     }
 
