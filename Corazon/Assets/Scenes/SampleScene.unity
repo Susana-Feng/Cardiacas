@@ -10343,7 +10343,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 160039599}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -26460,7 +26460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Teletransportacion
   Target: {fileID: 2089997058}
   ThePlayer: {fileID: 1248723725}
-  PlayerCamera: {fileID: 0}
+  PlayerCamera: {fileID: 1711860573}
 --- !u!114 &574035603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26489,7 +26489,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -26503,7 +26503,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 574035600}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -41194,8 +41194,16 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1376830816}
+    m_TransformParent: {fileID: 1041167506}
     m_Modifications:
+    - target: {fileID: 744174200703259975, guid: 479e9ddb96b511c43be091e7d80ae2ac, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3275424762533560585, guid: 479e9ddb96b511c43be091e7d80ae2ac, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4960422840766645518, guid: 479e9ddb96b511c43be091e7d80ae2ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.009
@@ -41214,6 +41222,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5159805629798867539, guid: 479e9ddb96b511c43be091e7d80ae2ac, type: 3}
       propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6935448976041143928, guid: 479e9ddb96b511c43be091e7d80ae2ac, type: 3}
+      propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7201734671794354106, guid: 479e9ddb96b511c43be091e7d80ae2ac, type: 3}
@@ -41238,7 +41250,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7201734671794354106, guid: 479e9ddb96b511c43be091e7d80ae2ac, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 14.351
+      value: -7.0266504
       objectReference: {fileID: 0}
     - target: {fileID: 7201734671794354106, guid: 479e9ddb96b511c43be091e7d80ae2ac, type: 3}
       propertyPath: m_LocalRotation.w
@@ -41246,7 +41258,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7201734671794354106, guid: 479e9ddb96b511c43be091e7d80ae2ac, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7201734671794354106, guid: 479e9ddb96b511c43be091e7d80ae2ac, type: 3}
       propertyPath: m_LocalRotation.y
@@ -54758,6 +54770,7 @@ Transform:
   - {fileID: 1299100958}
   - {fileID: 2060225184}
   - {fileID: 1975898174}
+  - {fileID: 836575771}
   - {fileID: 2085424721}
   - {fileID: 443861707}
   - {fileID: 947734361}
@@ -70747,7 +70760,6 @@ Transform:
   - {fileID: 1730827655}
   - {fileID: 1734659769}
   - {fileID: 1749016151}
-  - {fileID: 836575771}
   m_Father: {fileID: 1392848883}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1377753880
@@ -75736,7 +75748,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1491702738}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -102214,7 +102226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   totalContainers: 2
-  door: {fileID: 0}
+  door: {fileID: 836575771}
   doorSpeed: 2
 --- !u!4 &2060225184 stripped
 Transform:
