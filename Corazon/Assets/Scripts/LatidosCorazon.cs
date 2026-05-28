@@ -41,10 +41,20 @@ public class HeartBeat : MonoBehaviour
             _audioSource = gameObject.AddComponent<AudioSource>();
 
         _audioSource.playOnAwake = false;
-        _audioSource.spatialBlend = 0f;
         _audioSource.volume = volume;
         _audioSource.pitch = pitch;
         _audioSource.clip = beatSound;
+
+        // 🔊 Configuración de sonido espacial
+        _audioSource.spatialBlend = 1f;   // sonido 3D
+        _audioSource.minDistance = 1f;    // volumen máximo a 1 unidad
+        _audioSource.maxDistance = 3f;    // deja de sonar a 3 unidades
+
+        // Curva de atenuación personalizada: volumen 1 en minDistance, 0 en maxDistance
+        AnimationCurve rolloffCurve = new AnimationCurve();
+        rolloffCurve.AddKey(1f, 1f); // volumen completo en 1 unidad
+        rolloffCurve.AddKey(3f, 0f); // silencio total en 3 unidades
+        _audioSource.SetCustomCurve(AudioSourceCurveType.CustomRolloff, rolloffCurve);
     }
 
     private void Update()
