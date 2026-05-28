@@ -36,41 +36,70 @@ public class LanzadorObjetos : MonoBehaviour
     }
 
     // Método público que puedes llamar desde un botón
-    public void Relanzar()
+    public void Relanzar(float duracion)
     {
+        Shuffle();
         // Inicia la corutina que lanza todos los objetos uno por uno
-        StartCoroutine(LanzarTodos());
+        StartCoroutine(LanzarTodos(duracion));
     }
 
-    private IEnumerator LanzarTodos()
+    // Método para mezclar el orden de los objetos
+    private void Shuffle()
     {
-        // Recorre todos los objetos en la lista
-        for (int i = 0; i < objetos.Length; i++)
+        for (int i = objetos.Length - 1; i > 0; i--)
         {
-            GameObject objeto = objetos[i];
-            if (objeto == null) continue;
+            int randomIndex = Random.Range(0, i + 1);
 
-            Rigidbody rb = objeto.GetComponent<Rigidbody>();
+            // Intercambiar objetos
+            GameObject tempObj = objetos[i];
+            objetos[i] = objetos[randomIndex];
+            objetos[randomIndex] = tempObj;
 
-            if (rb != null)
-            {
-                // Activar el objeto y resetear posición
-                objeto.SetActive(true);
-                objeto.transform.position = posicionesIniciales[i];
-                rb.linearVelocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-
-                // Lanzar hacia arriba hasta la altura deseada
-                float fuerza = Mathf.Sqrt(2f * Physics.gravity.magnitude * altura);
-                rb.AddForce(Vector3.up * fuerza, ForceMode.VelocityChange);
-            }
-
-            // Espera el intervalo antes de lanzar el siguiente
-            yield return new WaitForSeconds(intervalo);
+            // Intercambiar posiciones iniciales para que coincidan
+            Vector3 tempPos = posicionesIniciales[i];
+            posicionesIniciales[i] = posicionesIniciales[randomIndex];
+            posicionesIniciales[randomIndex] = tempPos;
         }
     }
 
-    // Método para cuando el objeto sea agarrado
+
+    // Método para lanzar cada objeto con un intervalo
+    private IEnumerator LanzarTodos(float duracion)
+    {
+        float tiempoTranscurrido = 0f;
+
+        while (tiempoTranscurrido < duracion)
+        {
+            for (int i = 0; i < objetos.Length; i++)
+            {
+                // Verificar si el tiempo ya se agotó dentro del loop
+                if (tiempoTranscurrido >= duracion) yield break;
+
+                GameObject objeto = objetos[i];
+                if (objeto == null) continue;
+
+                Rigidbody rb = objeto.GetComponent<Rigidbody>();
+
+                if (rb != null)
+                {
+                    objeto.SetActive(true);
+                    objeto.transform.position = posicionesIniciales[i];
+                    rb.linearVelocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+
+                    float fuerza = Mathf.Sqrt(2f * Physics.gravity.magnitude * altura);
+                    rb.AddForce(Vector3.up * fuerza, ForceMode.VelocityChange);
+                }
+
+                tiempoTranscurrido += intervalo;
+                yield return new WaitForSeconds(intervalo);
+            }
+        }
+
+        Debug.Log("Tiempo de lanzamiento agotado.");
+    }
+
+    // Métodos para cuando el objeto sea agarrado
     public void OnGrabbed(SelectEnterEventArgs args)
     {
         GameObject grabbedObject = args.interactableObject.transform.gameObject;

@@ -7,7 +7,9 @@ public class DesactivarAlCaer : MonoBehaviour
         // Si el objeto toca el suelo (tag "Suelo")
         if (collision.gameObject.CompareTag("Suelo"))
         {
-            gameObject.SetActive(false);
+            if (gameObject.activeSelf == true) {
+                gameObject.SetActive(false);
+            }
         }
     }
 }

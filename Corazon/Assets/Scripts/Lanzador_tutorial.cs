@@ -23,7 +23,7 @@ public class LanzadorTutorial : MonoBehaviour
     public GameObject[] objetos;
 
     [Header("Componentes a activar cuando el objeto 2 se desactive")]
-    public GameObject[] componentesAActivar;
+    public GameObject[] m_ObjectsToActivate;
 
     [Header("Efecto de confetti")]
     public GameObject confettiEffect;
@@ -39,7 +39,7 @@ public class LanzadorTutorial : MonoBehaviour
             posicionesIniciales[i] = objetos[i].transform.position;
         }
 
-        foreach (GameObject componente in componentesAActivar)
+        foreach (GameObject componente in m_ObjectsToActivate)
         {
             if (componente != null)
                 componente.SetActive(false);
@@ -114,7 +114,7 @@ public class LanzadorTutorial : MonoBehaviour
                 yield return new WaitUntil(() => !obj2.activeSelf);
                 Debug.Log("Objeto 2 desactivado, activando componentes...");
 
-                ActivarComponentes();
+                activateObjects();
             }
         }
     }
@@ -146,15 +146,39 @@ public class LanzadorTutorial : MonoBehaviour
         Debug.Log($"{obj.name} congelado a altura: {obj.transform.position.y}");
     }
 
-    private void ActivarComponentes()
+    void activateObjects()
     {
-        foreach (GameObject componente in componentesAActivar)
+        if (m_ObjectsToActivate != null && m_ObjectsToActivate.Length > 0)
         {
-            if (componente != null)
+            foreach (GameObject obj in m_ObjectsToActivate)
             {
-                componente.SetActive(true);
-                Debug.Log($"Componente activado: {componente.name}");
+                if (obj != null)
+                {
+                    // Activar el GameObject
+                    obj.SetActive(true);
+                    Debug.Log($"Objeto activado: {obj.name}");
+
+                    // Activar SkinnedMeshRenderer si existe
+                    SkinnedMeshRenderer smr = obj.GetComponent<SkinnedMeshRenderer>();
+                    if (smr != null)
+                    {
+                        smr.enabled = true;
+                        Debug.Log($"SkinnedMeshRenderer activado en: {obj.name}");
+                    }
+
+                    // Buscar hijo llamado "CoachingCardRoot" y activarlo
+                    Transform child = obj.transform.Find("CoachingCardRoot");
+                    if (child != null)
+                    {
+                        child.gameObject.SetActive(true);
+                        Debug.Log("Objeto hijo 'CoachingCardRoot' activado.");
+                    }
+                }
             }
+        }
+        else
+        {
+            Debug.LogWarning("No se asignaron objetos en la lista m_ObjectsToActivate.");
         }
     }
 
