@@ -147,9 +147,9 @@ namespace Unity.VRTemplate
             {
                 Debug.Log("Iniciando partida de 30 segundos");
 
-                timer.IniciarContador(5f); // Iniciar el contador de 30 segundos);
-                lanzadorObjetos.Relanzar(5f); // Llamada al método público del segundo script
-                StartCoroutine(ActivarDespues(5f));
+                timer.IniciarContador(30f); // Iniciar el contador de 30 segundos);
+                lanzadorObjetos.Relanzar(30f); // Llamada al método público del segundo script
+                StartCoroutine(ActivarDespues(30f));
             }
             else
             {
