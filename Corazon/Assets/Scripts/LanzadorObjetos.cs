@@ -38,7 +38,7 @@ public class LanzadorObjetos : MonoBehaviour
     // Método público que puedes llamar desde un botón
     public void Relanzar(float duracion)
     {
-        Shuffle();
+        //Shuffle();
         // Inicia la corutina que lanza todos los objetos uno por uno
         StartCoroutine(LanzarTodos(duracion));
     }
@@ -70,6 +70,8 @@ public class LanzadorObjetos : MonoBehaviour
 
         while (tiempoTranscurrido < duracion)
         {
+            Shuffle();
+
             for (int i = 0; i < objetos.Length; i++)
             {
                 // Verificar si el tiempo ya se agotó dentro del loop
