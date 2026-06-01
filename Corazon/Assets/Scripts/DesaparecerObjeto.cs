@@ -2,7 +2,11 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
-public class DisappearOnDrop : MonoBehaviour
+/// <summary>
+/// Attach to every bad piece. No other components needed.
+/// When dropped, notifies BadPieceManager directly and destroys itself.
+/// </summary>
+public class DesaparecerObjeto : MonoBehaviour
 {
     private XRGrabInteractable grabInteractable;
 
@@ -14,11 +18,11 @@ public class DisappearOnDrop : MonoBehaviour
 
     private void OnDrop(SelectExitEventArgs args)
     {
-        gameObject.SetActive(false); // or use Destroy(gameObject);
-    }
-
-    private void OnDestroy()
-    {
         grabInteractable.selectExited.RemoveListener(OnDrop);
+
+        if (BadPieceManager.Instance != null)
+            BadPieceManager.Instance.OnBadPieceRemoved(gameObject);
+
+        Destroy(gameObject);
     }
 }
