@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PuzzleManager : MonoBehaviour
 {
@@ -18,18 +19,38 @@ public class PuzzleManager : MonoBehaviour
     [Header("Objects To Show On Completion")]
     public GameObject[] objectsToAppear;
 
+    [Header("Scale Animation Settings")]
+    public float scaleDuration = 1.8f; // was 0.35f, much slower now
+
     [Header("Completion Event")]
     public UnityEvent OnPuzzleComplete;
 
     private bool _completed = false;
     private bool _doorMoving = false;
 
+    // Store original scales so we restore them correctly
+    private Dictionary<GameObject, Vector3> _originalScales = new Dictionary<GameObject, Vector3>();
+
+    // -------------------------------------------------------------------------
+
     private void Start()
     {
+        // Store original scales and hide appear objects
         if (objectsToAppear != null)
             foreach (var obj in objectsToAppear)
-                if (obj != null) obj.SetActive(false);
+                if (obj != null)
+                {
+                    _originalScales[obj] = obj.transform.localScale;
+                    obj.SetActive(false);
+                }
+
+        if (objectsToDisappear != null)
+            foreach (var obj in objectsToDisappear)
+                if (obj != null)
+                    _originalScales[obj] = obj.transform.localScale;
     }
+
+    // -------------------------------------------------------------------------
 
     private void Update()
     {
@@ -41,7 +62,6 @@ public class PuzzleManager : MonoBehaviour
             _completed = true;
             _doorMoving = true;
             Debug.Log("[Puzzle] 🎉 Puzzle complete!");
-
             StartCoroutine(CompletionSequence());
             OnPuzzleComplete?.Invoke();
         }
@@ -53,7 +73,6 @@ public class PuzzleManager : MonoBehaviour
                 targetPosition,
                 doorSpeed * Time.deltaTime
             );
-
             if (Vector3.Distance(door.transform.position, targetPosition) < 0.001f)
             {
                 door.transform.position = targetPosition;
@@ -63,40 +82,92 @@ public class PuzzleManager : MonoBehaviour
         }
     }
 
+    // -------------------------------------------------------------------------
+
     private IEnumerator CompletionSequence()
     {
         yield return new WaitForSeconds(1f);
-        HideObjects();
-        ShowObjects();
+
+        // Scale down objects to hide
+        yield return StartCoroutine(ScaleObjects(objectsToDisappear, scaleDown: true));
+
+        // Deactivate them once shrunk
+        if (objectsToDisappear != null)
+            foreach (var obj in objectsToDisappear)
+                if (obj != null) obj.SetActive(false);
+
+        // Activate and scale up objects to show
+        if (objectsToAppear != null)
+            foreach (var obj in objectsToAppear)
+                if (obj != null)
+                {
+                    obj.transform.localScale = Vector3.zero;
+                    obj.SetActive(true);
+                }
+
+        yield return StartCoroutine(ScaleObjects(objectsToAppear, scaleDown: false));
     }
 
-    private void HideObjects()
-    {
-        if (objectsToDisappear == null) return;
+    // -------------------------------------------------------------------------
 
-        foreach (var obj in objectsToDisappear)
+    private IEnumerator ScaleObjects(GameObject[] objects, bool scaleDown)
+    {
+        if (objects == null) yield break;
+
+        var bottomPositions = new Dictionary<GameObject, Vector3>();
+        foreach (var obj in objects)
         {
-            if (obj != null)
+            if (obj == null) continue;
+            Renderer rend = obj.GetComponentInChildren<Renderer>();
+            if (rend != null)
+                bottomPositions[obj] = new Vector3(obj.transform.position.x, rend.bounds.min.y, obj.transform.position.z);
+            else
+                bottomPositions[obj] = obj.transform.position;
+        }
+
+        float elapsed = 0f;
+        while (elapsed < scaleDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / scaleDuration);
+
+            // Cubic ease — slow start, smooth finish
+            float smooth = scaleDown
+                ? 1f - (1f - t) * (1f - t) * (1f - t)   // ease out cubic for disappear
+                : t * t * t;                               // ease in cubic for appear
+
+            foreach (var obj in objects)
             {
-                obj.SetActive(false);
-                Debug.Log($"[Puzzle] 👻 Hidden: {obj.name}");
+                if (obj == null) continue;
+                Vector3 original = _originalScales.ContainsKey(obj) ? _originalScales[obj] : Vector3.one;
+                float scaleY = scaleDown ? Mathf.Lerp(1f, 0f, smooth) : Mathf.Lerp(0f, 1f, smooth);
+
+                obj.transform.localScale = new Vector3(original.x, original.y * scaleY, original.z);
+
+                if (bottomPositions.ContainsKey(obj))
+                {
+                    Renderer rend = obj.GetComponentInChildren<Renderer>();
+                    if (rend != null)
+                    {
+                        float currentBottom = rend.bounds.min.y;
+                        float diff = bottomPositions[obj].y - currentBottom;
+                        obj.transform.position += new Vector3(0, diff, 0);
+                    }
+                }
             }
+
+            yield return null;
+        }
+
+        foreach (var obj in objects)
+        {
+            if (obj == null) continue;
+            Vector3 original = _originalScales.ContainsKey(obj) ? _originalScales[obj] : Vector3.one;
+            obj.transform.localScale = scaleDown ? new Vector3(original.x, 0f, original.z) : original;
         }
     }
 
-    private void ShowObjects()
-    {
-        if (objectsToAppear == null) return;
-
-        foreach (var obj in objectsToAppear)
-        {
-            if (obj != null)
-            {
-                obj.SetActive(true);
-                Debug.Log($"[Puzzle] ✨ Shown: {obj.name}");
-            }
-        }
-    }
+    // -------------------------------------------------------------------------
 
     private void OnDrawGizmosSelected()
     {

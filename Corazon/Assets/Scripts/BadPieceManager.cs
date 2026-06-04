@@ -115,7 +115,7 @@ public class BadPieceManager : MonoBehaviour
                 GameObject rotationTarget = new GameObject($"{obj.name}_RotationTarget");
                 rotationTarget.transform.SetParent(this.transform);
                 rotationTarget.transform.position = obj.transform.position;
-                rotationTarget.transform.rotation = Quaternion.Euler(0, 90, 0);
+                rotationTarget.transform.rotation = Quaternion.Euler(0, 270, 0);
 
                 rotationPuzzle.targetSlot = rotationTarget.transform;
                 createdTargets.Add(rotationTarget);
