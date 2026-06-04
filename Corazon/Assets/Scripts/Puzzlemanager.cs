@@ -115,12 +115,22 @@ public class PuzzleManager : MonoBehaviour
         if (objects == null) yield break;
 
         var bottomPositions = new Dictionary<GameObject, Vector3>();
+        var originalScalesLocal = new Dictionary<GameObject, Vector3>();
+
         foreach (var obj in objects)
         {
             if (obj == null) continue;
-            Renderer rend = obj.GetComponentInChildren<Renderer>();
-            if (rend != null)
-                bottomPositions[obj] = new Vector3(obj.transform.position.x, rend.bounds.min.y, obj.transform.position.z);
+            originalScalesLocal[obj] = obj.transform.localScale;
+
+            // Calculate combined bounds of all children
+            Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
+            if (renderers.Length > 0)
+            {
+                float minY = float.MaxValue;
+                foreach (var r in renderers)
+                    minY = Mathf.Min(minY, r.bounds.min.y);
+                bottomPositions[obj] = new Vector3(obj.transform.position.x, minY, obj.transform.position.z);
+            }
             else
                 bottomPositions[obj] = obj.transform.position;
         }
@@ -131,26 +141,26 @@ public class PuzzleManager : MonoBehaviour
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / scaleDuration);
 
-            // Cubic ease — slow start, smooth finish
             float smooth = scaleDown
-                ? 1f - (1f - t) * (1f - t) * (1f - t)   // ease out cubic for disappear
-                : t * t * t;                               // ease in cubic for appear
+                ? 1f - (1f - t) * (1f - t) * (1f - t)
+                : t * t * t;
 
             foreach (var obj in objects)
             {
                 if (obj == null) continue;
-                Vector3 original = _originalScales.ContainsKey(obj) ? _originalScales[obj] : Vector3.one;
+                Vector3 original = originalScalesLocal[obj];
                 float scaleY = scaleDown ? Mathf.Lerp(1f, 0f, smooth) : Mathf.Lerp(0f, 1f, smooth);
-
                 obj.transform.localScale = new Vector3(original.x, original.y * scaleY, original.z);
 
                 if (bottomPositions.ContainsKey(obj))
                 {
-                    Renderer rend = obj.GetComponentInChildren<Renderer>();
-                    if (rend != null)
+                    Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
+                    if (renderers.Length > 0)
                     {
-                        float currentBottom = rend.bounds.min.y;
-                        float diff = bottomPositions[obj].y - currentBottom;
+                        float currentMinY = float.MaxValue;
+                        foreach (var r in renderers)
+                            currentMinY = Mathf.Min(currentMinY, r.bounds.min.y);
+                        float diff = bottomPositions[obj].y - currentMinY;
                         obj.transform.position += new Vector3(0, diff, 0);
                     }
                 }
@@ -162,8 +172,10 @@ public class PuzzleManager : MonoBehaviour
         foreach (var obj in objects)
         {
             if (obj == null) continue;
-            Vector3 original = _originalScales.ContainsKey(obj) ? _originalScales[obj] : Vector3.one;
-            obj.transform.localScale = scaleDown ? new Vector3(original.x, 0f, original.z) : original;
+            Vector3 original = originalScalesLocal[obj];
+            obj.transform.localScale = scaleDown
+                ? new Vector3(original.x, 0f, original.z)
+                : original;
         }
     }
 
