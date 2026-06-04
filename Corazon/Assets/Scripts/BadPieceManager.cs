@@ -16,22 +16,45 @@ public class BadPieceManager : MonoBehaviour
     public List<Transform> floatTargets = new List<Transform>();
 
     [Header("Float Settings")]
-    public float lerpSpeed = 0.8f;  // Slow movement speed
+    public float lerpSpeed = 0.8f;
     public float arrivalThreshold = 0.015f;
     public float hoverAmplitude = 0.04f;
     public float hoverFrequency = 1.1f;
-    public float staggerDelay = 0.25f;  // Longer delay between pieces
+    public float staggerDelay = 0.25f;
 
     [Header("Rotation Settings")]
     public bool applyRotationDuringFloat = true;
-    public float rotationLerpSpeed = 45f;  // Slow rotation speed (degrees per second)
-    public float hoverRotationSpeed = 15f;  // Very slow rotation while hovering
+    public float rotationLerpSpeed = 45f;
+    public float hoverRotationSpeed = 15f;
+
+    [Header("Tutorial Gate")]
+    [Tooltip("Assign the tutorial root GameObject (e.g. Tuto1). Music starts when its CoachingCardRoot child is deactivated.")]
+    public GameObject tutorialObject;
+
+    [Header("Music")]
+    [Tooltip("Plays while the player is removing bad pieces (starts when tutorial disappears).")]
+    public AudioClip badPhaseMusic;
+
+    [Tooltip("Plays when all bad pieces are gone and good pieces start floating in.")]
+    public AudioClip goodPhaseMusic;
+
+    [Tooltip("How long the crossfade between the two tracks takes (seconds).")]
+    public float musicCrossfadeDuration = 1.5f;
+
+    [Tooltip("Volume for both tracks (0–1).")]
+    [Range(0f, 1f)]
+    public float musicVolume = 1f;
 
     // -------------------------------------------------------------------------
 
     private int remaining;
     private bool triggered = false;
+    private bool musicStarted = false;   // true once bad-phase music has begun
     private List<GameObject> createdTargets = new List<GameObject>();
+
+    // Two AudioSources let us crossfade cleanly without gaps.
+    private AudioSource audioSourceA;
+    private AudioSource audioSourceB;
 
     private class PieceState
     {
@@ -54,6 +77,23 @@ public class BadPieceManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+
+        // Create a dedicated child for AudioSources so they are never disabled
+        // by anything toggling this GameObject or its components.
+        GameObject musicHost = new GameObject("MusicHost");
+        musicHost.transform.SetParent(null); // detach — lives at scene root
+        DontDestroyOnLoad(musicHost);        // survives scene reloads
+
+        audioSourceA = musicHost.AddComponent<AudioSource>();
+        audioSourceB = musicHost.AddComponent<AudioSource>();
+
+        foreach (var src in new[] { audioSourceA, audioSourceB })
+        {
+            src.loop = true;
+            src.playOnAwake = false;
+            src.volume = 0f;
+            src.spatialBlend = 0f; // 2D / no positional falloff
+        }
     }
 
     private void Start()
@@ -63,6 +103,10 @@ public class BadPieceManager : MonoBehaviour
             if (bp != null) remaining++;
 
         Debug.Log($"[BadPieceManager] Ready. {remaining} bad piece(s), {goodPieces.Count} good piece(s).");
+
+        // Music starts only once the tutorial disappears (watched in Update).
+        if (tutorialObject == null)
+            Debug.LogWarning("[BadPieceManager] No tutorialObject assigned — bad-phase music will never start.");
     }
 
     // -------------------------------------------------------------------------
@@ -75,9 +119,7 @@ public class BadPieceManager : MonoBehaviour
             puzzleComponent.enabled = false;
             var grabInteractable = piece.GetComponent<XRGrabInteractable>();
             if (grabInteractable != null)
-            {
                 grabInteractable.enabled = false;
-            }
         }
 
         remaining--;
@@ -97,6 +139,12 @@ public class BadPieceManager : MonoBehaviour
     private IEnumerator FloatGoodPiecesIn()
     {
         Debug.Log("[BadPieceManager] Floating good pieces in!");
+
+        // Crossfade to the good-phase music.
+        if (goodPhaseMusic != null)
+            StartCoroutine(CrossfadeMusic(audioSourceA, audioSourceB, goodPhaseMusic, musicCrossfadeDuration));
+        else
+            Debug.LogWarning("[BadPieceManager] No goodPhaseMusic assigned.");
 
         for (int i = 0; i < goodPieces.Count; i++)
         {
@@ -174,6 +222,78 @@ public class BadPieceManager : MonoBehaviour
     }
 
     // -------------------------------------------------------------------------
+    // Music helpers
+    // -------------------------------------------------------------------------
+
+    /// Fade in a clip on a source from silence to musicVolume.
+    /// <summary>
+    /// Fades out and stops all music. Called externally (e.g. HeartBeat) when game music should stop.
+    /// </summary>
+    public void StopMusic(float fadeDuration = 1f)
+    {
+        StartCoroutine(FadeOutAndStop(audioSourceA, fadeDuration));
+        StartCoroutine(FadeOutAndStop(audioSourceB, fadeDuration));
+    }
+
+    private IEnumerator FadeOutAndStop(AudioSource source, float duration)
+    {
+        if (source == null || !source.isPlaying) yield break;
+        float startVolume = source.volume;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            source.volume = Mathf.Lerp(startVolume, 0f, elapsed / duration);
+            yield return null;
+        }
+        source.Stop();
+        source.volume = 0f;
+    }
+
+    private IEnumerator FadeInMusic(AudioSource source, AudioClip clip, float duration)
+    {
+        Debug.Log($"[BadPieceManager] FadeInMusic START — clip={clip.name}, duration={duration}, source enabled={source.enabled}, gameObject active={source.gameObject.activeInHierarchy}");
+        source.clip = clip;
+        source.volume = 0f;
+        source.Play();
+        Debug.Log($"[BadPieceManager] AudioSource.Play() called — isPlaying={source.isPlaying}");
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            source.volume = Mathf.Lerp(0f, musicVolume, elapsed / duration);
+            yield return null;
+        }
+        source.volume = musicVolume;
+        Debug.Log($"[BadPieceManager] FadeInMusic DONE — final volume={source.volume}, isPlaying={source.isPlaying}");
+    }
+
+    /// Fade out the current source while fading in a new clip on the other source.
+    private IEnumerator CrossfadeMusic(AudioSource fadeOut, AudioSource fadeIn, AudioClip newClip, float duration)
+    {
+        float startVolume = fadeOut.volume;
+
+        fadeIn.clip = newClip;
+        fadeIn.volume = 0f;
+        fadeIn.Play();
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            fadeOut.volume = Mathf.Lerp(startVolume, 0f, t);
+            fadeIn.volume = Mathf.Lerp(0f, musicVolume, t);
+            yield return null;
+        }
+
+        fadeOut.volume = 0f;
+        fadeOut.Stop();
+        fadeIn.volume = musicVolume;
+    }
+
+    // -------------------------------------------------------------------------
 
     private IEnumerator LerpToFloatPositionAndRotation(PieceState state, Vector3 fromPos, Vector3 toPos, Quaternion toRot)
     {
@@ -187,13 +307,11 @@ public class BadPieceManager : MonoBehaviour
         float startTime = Time.time;
         float journeyLength = Vector3.Distance(fromPos, toPos);
         float duration = journeyLength / lerpSpeed;
-
-        // Ensure minimum duration for smooth slow movement
         if (duration < 1.5f) duration = 1.5f;
 
         float rotationStartTime = Time.time;
         Quaternion fromRot = state.obj.transform.rotation;
-        float rotationDuration = 2.0f; // Take 2 seconds to fully rotate
+        float rotationDuration = 2.0f;
 
         while (state.obj != null && !state.isHeld && !state.isSnapped)
         {
@@ -201,10 +319,8 @@ public class BadPieceManager : MonoBehaviour
             float fraction = Mathf.Clamp01(elapsed / duration);
             float smoothFraction = Mathf.SmoothStep(0, 1, fraction);
 
-            // Smooth position lerp
             state.obj.transform.position = Vector3.Lerp(fromPos, toPos, smoothFraction);
 
-            // Smooth rotation lerp
             if (applyRotationDuringFloat)
             {
                 float rotationElapsed = Time.time - rotationStartTime;
@@ -217,9 +333,7 @@ public class BadPieceManager : MonoBehaviour
             {
                 state.obj.transform.position = toPos;
                 if (applyRotationDuringFloat)
-                {
                     state.obj.transform.rotation = toRot;
-                }
                 break;
             }
 
@@ -230,12 +344,9 @@ public class BadPieceManager : MonoBehaviour
 
         state.obj.transform.position = toPos;
         if (applyRotationDuringFloat)
-        {
             state.obj.transform.rotation = toRot;
-        }
 
         state.hoverTimer = 0f;
-
         Debug.Log($"[BadPieceManager] '{state.obj.name}' ready to grab");
     }
 
@@ -316,6 +427,28 @@ public class BadPieceManager : MonoBehaviour
 
     private void Update()
     {
+        // Watch for the tutorial disappearing, then kick off bad-phase music.
+        // TutoManager never deactivates the root GameObject — it hides CoachingCardRoot instead.
+        // So we watch for CoachingCardRoot becoming inactive as the "tutorial dismissed" signal.
+        if (!musicStarted && tutorialObject != null)
+        {
+            Transform cardRoot = tutorialObject.transform.Find("CoachingCardRoot");
+            bool tutorialDismissed = cardRoot != null
+                ? !cardRoot.gameObject.activeInHierarchy   // CoachingCardRoot was hidden
+                : !tutorialObject.activeInHierarchy;       // fallback: root itself hidden
+
+            if (tutorialDismissed)
+            {
+                musicStarted = true;
+                Debug.Log("[BadPieceManager] Tutorial dismissed — starting bad-phase music.");
+
+                if (badPhaseMusic == null)
+                    Debug.LogError("[BadPieceManager] badPhaseMusic is NULL — assign it in the Inspector.");
+                else
+                    StartCoroutine(FadeInMusic(audioSourceA, badPhaseMusic, musicCrossfadeDuration));
+            }
+        }
+
         foreach (var s in states)
         {
             if (s.obj == null) continue;
@@ -331,12 +464,10 @@ public class BadPieceManager : MonoBehaviour
             if (s.rb != null && !s.rb.isKinematic) continue;
             if (Vector3.Distance(s.obj.transform.position, s.floatPosition) > arrivalThreshold * 4f) continue;
 
-            // Hover bob
             s.hoverTimer += Time.deltaTime;
             float yOffset = Mathf.Sin(s.hoverTimer * hoverFrequency * Mathf.PI * 2f) * hoverAmplitude;
             s.obj.transform.position = s.floatPosition + Vector3.up * yOffset;
 
-            // Slow rotation while hovering
             var rotationPuzzle = s.obj.GetComponent<CorrectRotationPuzzle>();
             if (rotationPuzzle != null && rotationPuzzle.targetSlot != null && !s.isHeld)
             {
@@ -354,10 +485,7 @@ public class BadPieceManager : MonoBehaviour
     private void OnDestroy()
     {
         foreach (var target in createdTargets)
-        {
-            if (target != null)
-                Destroy(target);
-        }
+            if (target != null) Destroy(target);
         createdTargets.Clear();
     }
 
@@ -374,4 +502,10 @@ public class BadPieceManager : MonoBehaviour
             Gizmos.DrawLine(t.position, t.position + Vector3.up * 0.25f);
         }
     }
+
+    public void stopHeartbeat()
+    {
+        StartCoroutine(FadeOutAndStop(audioSourceB, 1f));
+    }
+
 }

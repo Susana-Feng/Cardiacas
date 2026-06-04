@@ -1,3 +1,4 @@
+using NUnit.Framework.Interfaces;
 using UnityEngine;
 
 public class HeartBeat : MonoBehaviour
@@ -19,6 +20,7 @@ public class HeartBeat : MonoBehaviour
     public float volume = 1f;
     public float pitch = 1f;
 
+
     private AudioSource _audioSource;
     private float _beatInterval;
     private float _timer;
@@ -31,6 +33,11 @@ public class HeartBeat : MonoBehaviour
 
     private void Start()
     {
+        if (BadPieceManager.Instance != null)
+        {
+            BadPieceManager.Instance.stopHeartbeat();
+        }
+
         _baseScaleVec = Vector3.one * baseScale;
         _peakScaleVec = Vector3.one * beatScale;
         _beatInterval = 60f / beatsPerMinute;
@@ -118,4 +125,6 @@ public class HeartBeat : MonoBehaviour
         beatScale = Mathf.Max(baseScale, beatScale);
         pitch = Mathf.Clamp(pitch, 0.1f, 3f);
     }
+
 }
+

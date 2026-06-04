@@ -48002,6 +48002,11 @@ MonoBehaviour:
   applyRotationDuringFloat: 1
   rotationLerpSpeed: 5
   hoverRotationSpeed: 30
+  tutorialObject: {fileID: 809579169}
+  badPhaseMusic: {fileID: 8300000, guid: 8aa6fdd94190b234a8b51d2042800938, type: 3}
+  goodPhaseMusic: {fileID: 8300000, guid: eacbc38fd0d69be46a4809ce624b1bc3, type: 3}
+  musicCrossfadeDuration: 1.5
+  musicVolume: 1
 --- !u!1 &894369180
 GameObject:
   m_ObjectHideFlags: 0
