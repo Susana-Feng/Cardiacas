@@ -177,6 +177,14 @@ namespace Unity.VRTemplate
                 Next();
         }
 
+        public void OnBotonPresionado3()
+        {
+            if (m_CurrentStepIndex == m_StepList.Count - 1)
+                OnSecondButtonPressed();
+            else
+                Next();
+        }
+
         public void OnIniciarButtonPressed()
         {
             Debug.Log("Iniciar button pressed - iniciando partida");

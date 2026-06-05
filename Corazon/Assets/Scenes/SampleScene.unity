@@ -10485,7 +10485,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14311,7 +14311,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 835034614}
         m_TargetAssemblyTypeName: Unity.VRTemplate.TutoManager, Assembly-CSharp
-        m_MethodName: OnSecondButtonPressed
+        m_MethodName: OnBotonPresionado3
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -44162,33 +44162,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unity.VRTemplate.TutoManager
   m_StepButtonTextField: {fileID: 1931839959}
-  m_StepButtonTextField2: {fileID: 0}
+  m_StepButtonTextField2: {fileID: 1471056313}
   m_StepList:
   - stepObject: {fileID: 2008855555}
     buttonText: Continuar
     buttonText2: 
   - stepObject: {fileID: 831254346}
-    buttonText: Continuar
-    buttonText2: 
+    buttonText: Regresar
+    buttonText2: Continuar
   - stepObject: {fileID: 294380747}
-    buttonText: Continuar
-    buttonText2: 
+    buttonText: Regresar
+    buttonText2: Continuar
   - stepObject: {fileID: 1971454733}
-    buttonText: Continuar
-    buttonText2: 
+    buttonText: Regresar
+    buttonText2: Continuar
   - stepObject: {fileID: 843276536}
-    buttonText: Continuar
-    buttonText2: 
+    buttonText: Regresar
+    buttonText2: Continuar
   - stepObject: {fileID: 1283830388}
-    buttonText: Continuar
-    buttonText2: 
+    buttonText: Regresar
+    buttonText2: Continuar
   - stepObject: {fileID: 738501913}
-    buttonText: Continuar
-    buttonText2: 
+    buttonText: Regresar
+    buttonText2: Continuar
   - stepObject: {fileID: 1882962285}
     buttonText: Reiniciar tutorial
-    buttonText2: 
-  m_SecondButton: {fileID: 0}
+    buttonText2: Comenzar
+  m_SecondButton: {fileID: 1719539875}
   m_ObjectToDeactivate: {fileID: 809579169}
   m_ObjectsToActivate: []
   lanzadorTutorial: {fileID: 0}
@@ -45280,24 +45280,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unity.VRTemplate.TutoManager
   m_StepButtonTextField: {fileID: 514974895}
-  m_StepButtonTextField2: {fileID: 0}
+  m_StepButtonTextField2: {fileID: 1092842501}
   m_StepList:
   - stepObject: {fileID: 44630642}
     buttonText: Continuar
     buttonText2: 
   - stepObject: {fileID: 1041150135}
-    buttonText: Continuar
-    buttonText2: 
+    buttonText: Regresar
+    buttonText2: Continuar
   - stepObject: {fileID: 1453325608}
-    buttonText: Continuar
-    buttonText2: 
+    buttonText: Regresar
+    buttonText2: Continuar
   - stepObject: {fileID: 918458325}
-    buttonText: Continuar
-    buttonText2: 
+    buttonText: Regresar
+    buttonText2: Continuar
   - stepObject: {fileID: 1730336245}
     buttonText: Reiniciar tutorial
-    buttonText2: 
-  m_SecondButton: {fileID: 0}
+    buttonText2: Comenzar
+  m_SecondButton: {fileID: 228333847}
   m_ObjectToDeactivate: {fileID: 835034607}
   m_ObjectsToActivate: []
   lanzadorTutorial: {fileID: 0}
@@ -74560,7 +74560,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 835034614}
         m_TargetAssemblyTypeName: Unity.VRTemplate.TutoManager, Assembly-CSharp
-        m_MethodName: Next
+        m_MethodName: OnBotonPresionado1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -82399,7 +82399,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Iniciar
+  m_text: Continuar
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fbb7c6a04be6d8341934b839f24b42e1, type: 2}
   m_sharedMaterial: {fileID: 4687939059374929122, guid: fbb7c6a04be6d8341934b839f24b42e1, type: 2}
@@ -87731,7 +87731,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 809579176}
         m_TargetAssemblyTypeName: Unity.VRTemplate.TutoManager, Assembly-CSharp
-        m_MethodName: Next
+        m_MethodName: OnBotonPresionado1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -95296,7 +95296,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 809579176}
         m_TargetAssemblyTypeName: Unity.VRTemplate.TutoManager, Assembly-CSharp
-        m_MethodName: OnSecondButtonPressed
+        m_MethodName: OnBotonPresionado3
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
