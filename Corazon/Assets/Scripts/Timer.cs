@@ -8,6 +8,9 @@ public class Timer : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI textoContador;
 
+    [Header("Audio")]
+    public AudioSource audioSource; // <-- Asignar en el Inspector
+
     private float tiempoRestante;
     private bool corriendo = false;
 
@@ -52,5 +55,10 @@ public class Timer : MonoBehaviour
     private void OnTiempoAgotado()
     {
         Debug.Log("Tiempo agotado!");
+
+        if (audioSource != null)
+            audioSource.Play();
+        else
+            Debug.LogWarning("AudioSource no asignado en el Inspector.");
     }
 }

@@ -57,6 +57,9 @@ namespace Unity.VRTemplate
         // Referencia al segundo script desde el Inspector
         public Timer timer;
 
+        [Header("Audio conteo regresivo")]
+        public AudioSource conteoRegresivo; // <-- Asignar en el Inspector
+
         int m_CurrentStepIndex = 0;
 
         void Start()
@@ -177,22 +180,33 @@ namespace Unity.VRTemplate
         public void OnIniciarButtonPressed()
         {
             Debug.Log("Iniciar button pressed - iniciando partida");
-
             deactivateObject();
+            StartCoroutine(IniciarConConteo());
+        }
 
-            // Verificamos que el segundo script esté asignado
+        private IEnumerator IniciarConConteo()
+        {
+            // Continuar el flujo normal
             if (lanzadorTutorial != null)
             {
                 Debug.Log("Iniciando tutorial");
                 ResetToFirstCard();
-                lanzadorTutorial.Relanzar(); // Llamada al método público del segundo script
+                lanzadorTutorial.Relanzar();
             }
             else if (lanzadorObjetos != null)
             {
-                Debug.Log("Iniciando partida de 30 segundos");
+                // Reproducir audio de conteo regresivo
+                if (conteoRegresivo != null)
+                    conteoRegresivo.Play();
+                else
+                    Debug.LogWarning("AudioSource conteoRegresivo no asignado.");
 
-                timer.IniciarContador(30f); // Iniciar el contador de 30 segundos);
-                lanzadorObjetos.Relanzar(30f); // Llamada al método público del segundo script
+                // Esperar 3 segundos
+                yield return new WaitForSeconds(3f);
+
+                Debug.Log("Iniciando partida de 30 segundos");
+                timer.IniciarContador(30f);
+                lanzadorObjetos.Relanzar(30f);
                 StartCoroutine(ActivarDespues(30f));
             }
             else
