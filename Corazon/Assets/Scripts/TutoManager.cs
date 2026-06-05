@@ -20,10 +20,15 @@ namespace Unity.VRTemplate
 
             [SerializeField]
             public string buttonText;
+
+            [SerializeField]
+            public string buttonText2;
         }
 
         [SerializeField]
         public TextMeshProUGUI m_StepButtonTextField;
+        [SerializeField]
+        public TextMeshProUGUI m_StepButtonTextField2;
 
         [SerializeField]
         List<Step> m_StepList = new List<Step>();
@@ -58,8 +63,12 @@ namespace Unity.VRTemplate
         {
             Debug.Log("StepManager iniciado correctamente");
 
-            if (m_SecondButton != null)
-                m_SecondButton.SetActive(false);
+            bool isFirstStep = m_CurrentStepIndex == 0;
+            SetSecondButtonVisible(!isFirstStep);
+
+            // Aplica el texto del segundo botón si aplica
+            if (!isFirstStep && m_StepButtonTextField2 != null)
+                m_StepButtonTextField2.text = m_StepList[m_CurrentStepIndex].buttonText2;
         }
 
         public void Next()
@@ -69,10 +78,27 @@ namespace Unity.VRTemplate
             m_StepList[m_CurrentStepIndex].stepObject.SetActive(true);
             m_StepButtonTextField.text = m_StepList[m_CurrentStepIndex].buttonText;
 
+            if (m_StepButtonTextField2 != null)
+                m_StepButtonTextField2.text = m_StepList[m_CurrentStepIndex].buttonText2;
+
             Debug.Log($"Step actual: {m_CurrentStepIndex} / {m_StepList.Count - 1}");
 
-            bool isLastStep = m_CurrentStepIndex == m_StepList.Count - 1;
-            SetSecondButtonVisible(isLastStep);
+            bool isFirstStep = m_CurrentStepIndex == 0;
+            SetSecondButtonVisible(!isFirstStep); // Visible en todos menos el primero
+        }
+
+        public void Previous()
+        {
+            m_StepList[m_CurrentStepIndex].stepObject.SetActive(false);
+            m_CurrentStepIndex = (m_CurrentStepIndex - 1 + m_StepList.Count) % m_StepList.Count;
+            m_StepList[m_CurrentStepIndex].stepObject.SetActive(true);
+            m_StepButtonTextField.text = m_StepList[m_CurrentStepIndex].buttonText;
+            m_StepButtonTextField2.text = m_StepList[m_CurrentStepIndex].buttonText2;
+
+            Debug.Log($"Step actual: {m_CurrentStepIndex} / {m_StepList.Count - 1}");
+
+            bool isFirstStep = m_CurrentStepIndex == 0;
+            SetSecondButtonVisible(!isFirstStep);
         }
 
         public void ReiniciarTutorial()
@@ -128,6 +154,24 @@ namespace Unity.VRTemplate
             deactivateObject();
 
             activateObjects();
+        }
+
+        public void OnBotonPresionado1()
+        {
+            if (m_CurrentStepIndex == 0)
+                Next();
+            else if (m_CurrentStepIndex == m_StepList.Count - 1)
+                Next();
+            else
+                Previous();
+        }
+
+        public void OnBotonPresionado2()
+        {
+            if (m_CurrentStepIndex == m_StepList.Count - 1)
+                OnIniciarButtonPressed();
+            else
+                Next();
         }
 
         public void OnIniciarButtonPressed()
