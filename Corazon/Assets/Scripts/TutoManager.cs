@@ -9,6 +9,7 @@ namespace Unity.VRTemplate
 {
     /// <summary>
     /// Controls the steps in the coaching card.
+    /// Each step can have its own AudioClip, played via GameAudioManager when the step becomes visible.
     /// </summary>
     public class TutoManager : MonoBehaviour
     {
@@ -23,6 +24,10 @@ namespace Unity.VRTemplate
 
             [SerializeField]
             public string buttonText2;
+
+            [Tooltip("Voiceover that plays when this step becomes visible. Leave empty for silence.")]
+            [SerializeField]
+            public AudioClip stepAudio;
         }
 
         [SerializeField]
@@ -46,21 +51,20 @@ namespace Unity.VRTemplate
         GameObject[] m_ObjectsToActivate;
 
         [Header("Script opcional a inicializar tuto")]
-        // Referencia al segundo script desde el Inspector
         public LanzadorTutorial lanzadorTutorial;
 
         [Header("Script opcional partida 30 seg")]
-        // Referencia al segundo script desde el Inspector
         public LanzadorObjetos lanzadorObjetos;
 
         [Header("Script opcional timer 30 seg")]
-        // Referencia al segundo script desde el Inspector
         public Timer timer;
 
         [Header("Audio conteo regresivo")]
-        public AudioSource conteoRegresivo; // <-- Asignar en el Inspector
+        public AudioSource conteoRegresivo;
 
         int m_CurrentStepIndex = 0;
+
+        // -------------------------------------------------------------------------
 
         void Start()
         {
@@ -69,10 +73,16 @@ namespace Unity.VRTemplate
             bool isFirstStep = m_CurrentStepIndex == 0;
             SetSecondButtonVisible(!isFirstStep);
 
-            // Aplica el texto del segundo botón si aplica
             if (!isFirstStep && m_StepButtonTextField2 != null)
                 m_StepButtonTextField2.text = m_StepList[m_CurrentStepIndex].buttonText2;
+
+            // Play audio for the first step on start
+            PlayCurrentStepAudio();
         }
+
+        // -------------------------------------------------------------------------
+        // Navigation
+        // -------------------------------------------------------------------------
 
         public void Next()
         {
@@ -87,7 +97,9 @@ namespace Unity.VRTemplate
             Debug.Log($"Step actual: {m_CurrentStepIndex} / {m_StepList.Count - 1}");
 
             bool isFirstStep = m_CurrentStepIndex == 0;
-            SetSecondButtonVisible(!isFirstStep); // Visible en todos menos el primero
+            SetSecondButtonVisible(!isFirstStep);
+
+            PlayCurrentStepAudio();
         }
 
         public void Previous()
@@ -102,17 +114,15 @@ namespace Unity.VRTemplate
 
             bool isFirstStep = m_CurrentStepIndex == 0;
             SetSecondButtonVisible(!isFirstStep);
+
+            PlayCurrentStepAudio();
         }
 
         public void ReiniciarTutorial()
         {
-            // Ocultar el step actual
             m_StepList[m_CurrentStepIndex].stepObject.SetActive(false);
-
-            // Avanzar al siguiente índice
             m_CurrentStepIndex++;
 
-            // Si todavía hay pasos disponibles
             if (m_CurrentStepIndex < m_StepList.Count)
             {
                 m_StepList[m_CurrentStepIndex].stepObject.SetActive(true);
@@ -122,29 +132,44 @@ namespace Unity.VRTemplate
 
                 bool isLastStep = m_CurrentStepIndex == m_StepList.Count - 1;
                 SetSecondButtonVisible(isLastStep);
+
+                PlayCurrentStepAudio();
             }
             else
             {
-                // Antes de desactivar, volver al primer card
                 m_CurrentStepIndex = 0;
                 m_StepList[m_CurrentStepIndex].stepObject.SetActive(true);
                 m_StepButtonTextField.text = m_StepList[m_CurrentStepIndex].buttonText;
                 SetSecondButtonVisible(false);
 
-                Debug.Log("Reiniciado al primer card antes de desactivar.");;
+                Debug.Log("Reiniciado al primer card antes de desactivar.");
 
-                // Ya se llegó al último card → desactivar el objeto principal y activar otro
+                PlayCurrentStepAudio();
+
                 if (m_ObjectToDeactivate != null)
-                {
                     deactivateObject();
-                }
 
                 if (m_ObjectsToActivate != null)
-                {
                     activateObjects();
-                }
             }
         }
+
+        public void ResetToFirstCard()
+        {
+            m_StepList[m_CurrentStepIndex].stepObject.SetActive(false);
+            m_CurrentStepIndex = 0;
+            m_StepList[m_CurrentStepIndex].stepObject.SetActive(true);
+            m_StepButtonTextField.text = m_StepList[m_CurrentStepIndex].buttonText;
+            SetSecondButtonVisible(false);
+
+            Debug.Log("Tutorial reiniciado al primer card.");
+
+            PlayCurrentStepAudio();
+        }
+
+        // -------------------------------------------------------------------------
+        // Button handlers (unchanged)
+        // -------------------------------------------------------------------------
 
         public void OnFirstButtonPressed()
         {
@@ -155,7 +180,6 @@ namespace Unity.VRTemplate
         public void OnSecondButtonPressed()
         {
             deactivateObject();
-
             activateObjects();
         }
 
@@ -192,9 +216,36 @@ namespace Unity.VRTemplate
             StartCoroutine(IniciarConConteo());
         }
 
+        public void OnIniciarPartidaRealPressed()
+        {
+            deactivateObject();
+            if (lanzadorObjetos != null)
+            {
+                Debug.Log("Iniciando partida de 60 segundos");
+                timer.IniciarContador(60f);
+                lanzadorObjetos.Relanzar(60f);
+            }
+        }
+
+        // -------------------------------------------------------------------------
+        // Audio
+        // -------------------------------------------------------------------------
+
+        private void PlayCurrentStepAudio()
+        {
+            if (GameAudioManager.Instance == null) return;
+
+            var clip = m_StepList[m_CurrentStepIndex].stepAudio;
+            if (clip != null)
+                GameAudioManager.Instance.PlayTutorialAudio(clip);
+        }
+
+        // -------------------------------------------------------------------------
+        // Coroutines & helpers (unchanged)
+        // -------------------------------------------------------------------------
+
         private IEnumerator IniciarConConteo()
         {
-            // Continuar el flujo normal
             if (lanzadorTutorial != null)
             {
                 Debug.Log("Iniciando tutorial");
@@ -203,13 +254,11 @@ namespace Unity.VRTemplate
             }
             else if (lanzadorObjetos != null)
             {
-                // Reproducir audio de conteo regresivo
                 if (conteoRegresivo != null)
                     conteoRegresivo.Play();
                 else
                     Debug.LogWarning("AudioSource conteoRegresivo no asignado.");
 
-                // Esperar 3 segundos
                 yield return new WaitForSeconds(3f);
 
                 Debug.Log("Iniciando partida de 30 segundos");
@@ -223,16 +272,10 @@ namespace Unity.VRTemplate
             }
         }
 
-        public void OnIniciarPartidaRealPressed()
+        private IEnumerator ActivarDespues(float tiempo)
         {
-            deactivateObject();
-            if (lanzadorObjetos != null)
-            {
-                Debug.Log("Iniciando partida de 60 segundos");
-                timer.IniciarContador(60f); // Iniciar el contador de 60 segundos);
-                lanzadorObjetos.Relanzar(60f); // Llamada al método público del segundo script
-            }
-                
+            yield return new WaitForSeconds(tiempo);
+            activateObjects();
         }
 
         void SetSecondButtonVisible(bool visible)
@@ -242,15 +285,8 @@ namespace Unity.VRTemplate
                 Debug.LogWarning("m_SecondButton no está asignado.");
                 return;
             }
-
             m_SecondButton.SetActive(visible);
             Debug.Log($"Segundo botón SetActive: {visible}");
-        }
-
-        private IEnumerator ActivarDespues(float tiempo)
-        {
-            yield return new WaitForSeconds(tiempo);
-            activateObjects();
         }
 
         void activateObjects()
@@ -261,11 +297,9 @@ namespace Unity.VRTemplate
                 {
                     if (obj != null)
                     {
-                        // Activar el GameObject
                         obj.SetActive(true);
                         Debug.Log($"Objeto activado: {obj.name}");
 
-                        // Activar SkinnedMeshRenderer si existe
                         SkinnedMeshRenderer smr = obj.GetComponent<SkinnedMeshRenderer>();
                         if (smr != null)
                         {
@@ -273,7 +307,6 @@ namespace Unity.VRTemplate
                             Debug.Log($"SkinnedMeshRenderer activado en: {obj.name}");
                         }
 
-                        // Buscar hijo llamado "CoachingCardRoot" y activarlo
                         Transform child = obj.transform.Find("CoachingCardRoot");
                         if (child != null)
                         {
@@ -293,7 +326,6 @@ namespace Unity.VRTemplate
         {
             if (m_ObjectToDeactivate != null)
             {
-                // Desactivar el SkinnedMeshRenderer (si existe)
                 SkinnedMeshRenderer smr = m_ObjectToDeactivate.GetComponent<SkinnedMeshRenderer>();
                 if (smr != null)
                 {
@@ -305,7 +337,6 @@ namespace Unity.VRTemplate
                     Debug.LogWarning($"No se encontró SkinnedMeshRenderer en: {m_ObjectToDeactivate.name}");
                 }
 
-                // Buscar hijo llamado "CoachingCardRoot" y desactivarlo
                 Transform child = m_ObjectToDeactivate.transform.Find("CoachingCardRoot");
                 if (child != null)
                 {
@@ -322,28 +353,5 @@ namespace Unity.VRTemplate
                 Debug.LogWarning("m_ObjectToDeactivate no está asignado.");
             }
         }
-
-        public void ResetToFirstCard()
-        {
-            // Ocultar el card actual
-            m_StepList[m_CurrentStepIndex].stepObject.SetActive(false);
-
-            // Reiniciar índice al primer card
-            m_CurrentStepIndex = 0;
-
-            // Mostrar el primer card
-            m_StepList[m_CurrentStepIndex].stepObject.SetActive(true);
-            m_StepButtonTextField.text = m_StepList[m_CurrentStepIndex].buttonText;
-
-            // Ocultar el segundo botón
-            SetSecondButtonVisible(false);
-
-            Debug.Log("Tutorial reiniciado al primer card.");
-        }
-
-
     }
-
 }
-
-

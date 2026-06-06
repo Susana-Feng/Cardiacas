@@ -10485,7 +10485,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -22634,6 +22634,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 441927212}
   m_CullTransparentMesh: 1
+--- !u!1 &442798123
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 442798124}
+  - component: {fileID: 442798125}
+  m_Layer: 0
+  m_Name: GameAudioManagerGame1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &442798124
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 442798123}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1385911687}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &442798125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 442798123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d89f86baa317b40bccf70b993f4f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameAudioManager
+  badPhaseMusic: {fileID: 8300000, guid: 8aa6fdd94190b234a8b51d2042800938, type: 3}
+  goodPhaseMusic: {fileID: 8300000, guid: eacbc38fd0d69be46a4809ce624b1bc3, type: 3}
+  crossfadeDuration: 1.5
+  musicVolume: 1
+  voiceVolume: 1
 --- !u!1 &442983194
 GameObject:
   m_ObjectHideFlags: 0
@@ -29574,6 +29623,7 @@ MonoBehaviour:
   Target: {fileID: 2089997058}
   ThePlayer: {fileID: 1248723725}
   PlayerCamera: {fileID: 1711860573}
+  arrivalAudio: {fileID: 0}
 --- !u!114 &574035603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38188,6 +38238,7 @@ MonoBehaviour:
   Target: {fileID: 912626156}
   ThePlayer: {fileID: 1248723725}
   PlayerCamera: {fileID: 1711860573}
+  arrivalAudio: {fileID: 0}
 --- !u!114 &652569055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44167,27 +44218,35 @@ MonoBehaviour:
   - stepObject: {fileID: 2008855555}
     buttonText: Continuar
     buttonText2: 
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 831254346}
     buttonText: Regresar
     buttonText2: Continuar
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 294380747}
     buttonText: Regresar
     buttonText2: Continuar
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 1971454733}
     buttonText: Regresar
     buttonText2: Continuar
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 843276536}
     buttonText: Regresar
     buttonText2: Continuar
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 1283830388}
     buttonText: Regresar
     buttonText2: Continuar
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 738501913}
     buttonText: Regresar
     buttonText2: Continuar
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 1882962285}
     buttonText: Reiniciar tutorial
     buttonText2: Comenzar
+    stepAudio: {fileID: 0}
   m_SecondButton: {fileID: 1719539875}
   m_ObjectToDeactivate: {fileID: 809579169}
   m_ObjectsToActivate: []
@@ -45285,18 +45344,23 @@ MonoBehaviour:
   - stepObject: {fileID: 44630642}
     buttonText: Continuar
     buttonText2: 
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 1041150135}
     buttonText: Regresar
     buttonText2: Continuar
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 1453325608}
     buttonText: Regresar
     buttonText2: Continuar
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 918458325}
     buttonText: Regresar
     buttonText2: Continuar
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 1730336245}
     buttonText: Reiniciar tutorial
     buttonText2: Comenzar
+    stepAudio: {fileID: 0}
   m_SecondButton: {fileID: 228333847}
   m_ObjectToDeactivate: {fileID: 835034607}
   m_ObjectsToActivate: []
@@ -47352,6 +47416,7 @@ MonoBehaviour:
   Target: {fileID: 1980798766}
   ThePlayer: {fileID: 1248723725}
   PlayerCamera: {fileID: 1711860573}
+  arrivalAudio: {fileID: 0}
 --- !u!114 &874670407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48809,13 +48874,8 @@ MonoBehaviour:
   hoverFrequency: 1
   staggerDelay: 0.15
   applyRotationDuringFloat: 1
-  rotationLerpSpeed: 5
   hoverRotationSpeed: 30
   tutorialObject: {fileID: 809579169}
-  badPhaseMusic: {fileID: 8300000, guid: 8aa6fdd94190b234a8b51d2042800938, type: 3}
-  goodPhaseMusic: {fileID: 8300000, guid: eacbc38fd0d69be46a4809ce624b1bc3, type: 3}
-  musicCrossfadeDuration: 1.5
-  musicVolume: 1
 --- !u!1 &894369180
 GameObject:
   m_ObjectHideFlags: 0
@@ -57036,6 +57096,7 @@ MonoBehaviour:
   - stepObject: {fileID: 1092535468}
     buttonText: Iniciar
     buttonText2: 
+    stepAudio: {fileID: 0}
   m_SecondButton: {fileID: 0}
   m_ObjectToDeactivate: {fileID: 974860768}
   m_ObjectsToActivate:
@@ -57767,6 +57828,7 @@ MonoBehaviour:
   Target: {fileID: 1980798766}
   ThePlayer: {fileID: 1248723725}
   PlayerCamera: {fileID: 1711860573}
+  arrivalAudio: {fileID: 0}
 --- !u!114 &995560153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66218,6 +66280,7 @@ MonoBehaviour:
   Target: {fileID: 0}
   ThePlayer: {fileID: 0}
   PlayerCamera: {fileID: 0}
+  arrivalAudio: {fileID: 0}
 --- !u!114 &1230078291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78487,6 +78550,7 @@ Transform:
   - {fileID: 725554829}
   - {fileID: 349686250}
   - {fileID: 841261773}
+  - {fileID: 442798124}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1387653845
@@ -83600,6 +83664,7 @@ MonoBehaviour:
   Target: {fileID: 0}
   ThePlayer: {fileID: 0}
   PlayerCamera: {fileID: 0}
+  arrivalAudio: {fileID: 0}
 --- !u!1 &1491074556
 GameObject:
   m_ObjectHideFlags: 0
@@ -85412,12 +85477,15 @@ MonoBehaviour:
   - stepObject: {fileID: 2139163609}
     buttonText: Continuar
     buttonText2: 
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 1792092554}
     buttonText: Continuar
     buttonText2: 
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 129746542}
     buttonText: Reiniciar tutorial
     buttonText2: 
+    stepAudio: {fileID: 0}
   m_SecondButton: {fileID: 0}
   m_ObjectToDeactivate: {fileID: 1519369809}
   m_ObjectsToActivate: []
@@ -85800,9 +85868,11 @@ MonoBehaviour:
   - stepObject: {fileID: 1515876546}
     buttonText: Continuar
     buttonText2: 
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 387593938}
     buttonText: "Reiniciar pr\xE1ctica"
     buttonText2: Comenzar
+    stepAudio: {fileID: 0}
   m_SecondButton: {fileID: 1727708050}
   m_ObjectToDeactivate: {fileID: 1519996844}
   m_ObjectsToActivate:
@@ -91225,18 +91295,23 @@ MonoBehaviour:
   - stepObject: {fileID: 855887959}
     buttonText: Continuar
     buttonText2: 
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 304355427}
     buttonText: Regresar
     buttonText2: Continuar
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 97168734}
     buttonText: Regresar
     buttonText2: Continuar
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 1028309655}
     buttonText: Regresar
     buttonText2: Continuar
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 1856848715}
     buttonText: Reiniciar tutorial
     buttonText2: Empezar prueba
+    stepAudio: {fileID: 0}
   m_SecondButton: {fileID: 2098783192}
   m_ObjectToDeactivate: {fileID: 1615042353}
   m_ObjectsToActivate: []
@@ -93836,6 +93911,7 @@ MonoBehaviour:
   Target: {fileID: 1813300238}
   ThePlayer: {fileID: 1248723725}
   PlayerCamera: {fileID: 1711860573}
+  arrivalAudio: {fileID: 8300000, guid: 24cafa0d04bc0194aa0a117bfc58e813, type: 3}
 --- !u!114 &1685620832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98416,12 +98492,15 @@ MonoBehaviour:
   - stepObject: {fileID: 2139163609}
     buttonText: Continuar
     buttonText2: 
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 1792092554}
     buttonText: Continuar
     buttonText2: 
+    stepAudio: {fileID: 0}
   - stepObject: {fileID: 129746542}
     buttonText: Reiniciar tutorial
     buttonText2: 
+    stepAudio: {fileID: 0}
   m_SecondButton: {fileID: 0}
   m_ObjectToDeactivate: {fileID: 1519369809}
   m_ObjectsToActivate: []
@@ -101658,6 +101737,7 @@ MonoBehaviour:
   Target: {fileID: 912626156}
   ThePlayer: {fileID: 1248723725}
   PlayerCamera: {fileID: 1711860573}
+  arrivalAudio: {fileID: 0}
 --- !u!114 &1863650179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104540,6 +104620,7 @@ MonoBehaviour:
   Target: {fileID: 0}
   ThePlayer: {fileID: 0}
   PlayerCamera: {fileID: 0}
+  arrivalAudio: {fileID: 0}
 --- !u!114 &1918009631
 MonoBehaviour:
   m_ObjectHideFlags: 0
