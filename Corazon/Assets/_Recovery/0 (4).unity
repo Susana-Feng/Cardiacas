@@ -22680,13 +22680,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameAudioManager
   badPhaseMusic: {fileID: 8300000, guid: 8aa6fdd94190b234a8b51d2042800938, type: 3}
   goodPhaseMusic: {fileID: 8300000, guid: eacbc38fd0d69be46a4809ce624b1bc3, type: 3}
-  badPhaseStartVO: {fileID: 8300000, guid: 24cafa0d04bc0194aa0a117bfc58e813, type: 3}
-  goodPhaseStartVO: {fileID: 8300000, guid: 42b106df1d39486419a357a1c4e776d1, type: 3}
-  goodPiecePlacedVOs:
-  - {fileID: 8300000, guid: afbc1d600d5073d40ae6d0a4bcbd51d9, type: 3}
-  - {fileID: 8300000, guid: 23e6ef58647fbad4b8639de89c541aba, type: 3}
-  - {fileID: 8300000, guid: 19ed54d636644ca45b82ccc2a1f01814, type: 3}
-  - {fileID: 8300000, guid: 5ee91aabd49fc654ca13c678ecb6ebc9, type: 3}
   crossfadeDuration: 1.5
   musicVolume: 1
   voiceVolume: 1
@@ -44261,15 +44254,6 @@ MonoBehaviour:
   lanzadorObjetos: {fileID: 0}
   timer: {fileID: 0}
   conteoRegresivo: {fileID: 0}
-  frameVoiceovers:
-  - {fileID: 8300000, guid: 19ed54d636644ca45b82ccc2a1f01814, type: 3}
-  - {fileID: 8300000, guid: 699b78e3c6880f64cb1a4572a0406843, type: 3}
-  - {fileID: 8300000, guid: 5ee91aabd49fc654ca13c678ecb6ebc9, type: 3}
-  - {fileID: 8300000, guid: 42b106df1d39486419a357a1c4e776d1, type: 3}
-  - {fileID: 8300000, guid: afbc1d600d5073d40ae6d0a4bcbd51d9, type: 3}
-  - {fileID: 8300000, guid: 42b106df1d39486419a357a1c4e776d1, type: 3}
-  - {fileID: 8300000, guid: 5ee91aabd49fc654ca13c678ecb6ebc9, type: 3}
-  - {fileID: 8300000, guid: 24cafa0d04bc0194aa0a117bfc58e813, type: 3}
 --- !u!1001 &810187238
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45384,7 +45368,6 @@ MonoBehaviour:
   lanzadorObjetos: {fileID: 0}
   timer: {fileID: 0}
   conteoRegresivo: {fileID: 0}
-  frameVoiceovers: []
 --- !u!1001 &836575770
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57122,7 +57105,6 @@ MonoBehaviour:
   lanzadorObjetos: {fileID: 1582593731}
   timer: {fileID: 2130867818}
   conteoRegresivo: {fileID: 254104044}
-  frameVoiceovers: []
 --- !u!1 &976442729
 GameObject:
   m_ObjectHideFlags: 0
@@ -85511,7 +85493,6 @@ MonoBehaviour:
   lanzadorObjetos: {fileID: 0}
   timer: {fileID: 0}
   conteoRegresivo: {fileID: 0}
-  frameVoiceovers: []
 --- !u!1001 &1519996841
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -85900,7 +85881,6 @@ MonoBehaviour:
   lanzadorObjetos: {fileID: 1582593731}
   timer: {fileID: 2130867818}
   conteoRegresivo: {fileID: 0}
-  frameVoiceovers: []
 --- !u!1 &1528486774
 GameObject:
   m_ObjectHideFlags: 0
@@ -91339,7 +91319,6 @@ MonoBehaviour:
   lanzadorObjetos: {fileID: 0}
   timer: {fileID: 0}
   conteoRegresivo: {fileID: 0}
-  frameVoiceovers: []
 --- !u!1 &1615747184
 GameObject:
   m_ObjectHideFlags: 0
@@ -98529,7 +98508,6 @@ MonoBehaviour:
   lanzadorObjetos: {fileID: 0}
   timer: {fileID: 0}
   conteoRegresivo: {fileID: 0}
-  frameVoiceovers: []
 --- !u!114 &1783621279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128333,8 +128311,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PuzzlePieceAutoRotate
   targetSlot: {fileID: 7172836335959653203}
   rotationSpeed: 90
-  placementDistanceThreshold: 0.15
-  placementAngleThreshold: 15
   enableDebugLogs: 1
 --- !u!222 &4959921755038109234
 CanvasRenderer:
@@ -128821,8 +128797,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PuzzlePieceAutoRotate
   targetSlot: {fileID: 6141936892055706185}
   rotationSpeed: 90
-  placementDistanceThreshold: 0.15
-  placementAngleThreshold: 15
   enableDebugLogs: 1
 --- !u!1 &7679103084579839140
 GameObject:
@@ -129159,8 +129133,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PuzzlePieceAutoRotate
   targetSlot: {fileID: 618406216810876593}
   rotationSpeed: 90
-  placementDistanceThreshold: 0.15
-  placementAngleThreshold: 15
   enableDebugLogs: 1
 --- !u!1 &7928921381484458281
 GameObject:
@@ -129284,8 +129256,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PuzzlePieceAutoRotate
   targetSlot: {fileID: 1690161959777547888}
   rotationSpeed: 90
-  placementDistanceThreshold: 0.15
-  placementAngleThreshold: 15
   enableDebugLogs: 1
 --- !u!1 &8515670464733370827
 GameObject:

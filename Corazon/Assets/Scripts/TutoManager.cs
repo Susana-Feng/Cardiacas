@@ -64,6 +64,8 @@ namespace Unity.VRTemplate
 
         int m_CurrentStepIndex = 0;
 
+        public List<AudioClip> frameVoiceovers;
+
         // -------------------------------------------------------------------------
 
         void Start()
@@ -86,6 +88,7 @@ namespace Unity.VRTemplate
 
         public void Next()
         {
+
             m_StepList[m_CurrentStepIndex].stepObject.SetActive(false);
             m_CurrentStepIndex = (m_CurrentStepIndex + 1) % m_StepList.Count;
             m_StepList[m_CurrentStepIndex].stepObject.SetActive(true);
@@ -95,7 +98,7 @@ namespace Unity.VRTemplate
                 m_StepButtonTextField2.text = m_StepList[m_CurrentStepIndex].buttonText2;
 
             Debug.Log($"Step actual: {m_CurrentStepIndex} / {m_StepList.Count - 1}");
-
+            GameAudioManager.Instance?.PlayTutorialAudio(frameVoiceovers[m_CurrentStepIndex]);
             bool isFirstStep = m_CurrentStepIndex == 0;
             SetSecondButtonVisible(!isFirstStep);
 
@@ -107,6 +110,7 @@ namespace Unity.VRTemplate
             m_StepList[m_CurrentStepIndex].stepObject.SetActive(false);
             m_CurrentStepIndex = (m_CurrentStepIndex - 1 + m_StepList.Count) % m_StepList.Count;
             m_StepList[m_CurrentStepIndex].stepObject.SetActive(true);
+            GameAudioManager.Instance?.PlayTutorialAudio(frameVoiceovers[m_CurrentStepIndex]);
             m_StepButtonTextField.text = m_StepList[m_CurrentStepIndex].buttonText;
             m_StepButtonTextField2.text = m_StepList[m_CurrentStepIndex].buttonText2;
 

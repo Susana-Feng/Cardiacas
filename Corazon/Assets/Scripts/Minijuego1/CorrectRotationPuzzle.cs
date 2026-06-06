@@ -11,12 +11,19 @@ public class CorrectRotationPuzzle : MonoBehaviour
     [Header("Rotation Speed")]
     public float rotationSpeed = 90f;
 
+    [Header("Placement Detection")]
+    [Tooltip("How close (meters) the piece must be to the slot to count as placed.")]
+    public float placementDistanceThreshold = 0.15f;
+    [Tooltip("How aligned (degrees) the piece must be to the slot to count as placed.")]
+    public float placementAngleThreshold = 15f;
+
     [Header("Debug")]
     public bool enableDebugLogs = true;
 
     private XRGrabInteractable _grab;
     private bool _isHeld;
     private bool _isDestroyed = false;
+    private bool _isPlaced = false;
     private Rigidbody _rb;
     private Quaternion _initialTargetRotation;
 
@@ -93,6 +100,9 @@ public class CorrectRotationPuzzle : MonoBehaviour
 
         if (enableDebugLogs)
             Debug.Log($"[CorrectRotation] '{name}' released");
+
+        // Check for correct placement on release
+        CheckPlacement();
     }
 
     private void FixedUpdate()
@@ -126,6 +136,50 @@ public class CorrectRotationPuzzle : MonoBehaviour
                 Debug.Log($"[CorrectRotation] '{name}' rotating: {angleToTarget:F1}° to target");
         }
     }
+
+    // -------------------------------------------------------------------------
+
+    /// <summary>
+    /// Checks whether the piece is close enough and aligned enough to the target slot.
+    /// If so, snaps it into place, plays the placed VO, and locks it.
+    /// </summary>
+    private void CheckPlacement()
+    {
+        if (_isPlaced || targetSlot == null) return;
+
+        float distance = Vector3.Distance(transform.position, targetSlot.position);
+        float angle = Quaternion.Angle(transform.rotation, targetSlot.rotation);
+
+        if (enableDebugLogs)
+            Debug.Log($"[CorrectRotation] '{name}' release check — dist: {distance:F3}m, angle: {angle:F1}°");
+
+        if (distance <= placementDistanceThreshold && angle <= placementAngleThreshold)
+        {
+            _isPlaced = true;
+
+            // Snap to exact slot position and rotation
+            transform.position = targetSlot.position;
+            transform.rotation = targetSlot.rotation;
+
+            // Lock in place
+            if (_rb != null)
+            {
+                _rb.isKinematic = true;
+                _rb.constraints = RigidbodyConstraints.FreezeAll;
+            }
+
+            // Disable grabbing so the piece can't be picked up again
+            if (_grab != null)
+                _grab.enabled = false;
+
+            Debug.Log($"[CorrectRotation] '{name}' correctly placed!");
+
+            // Fire the voiceover
+            GameAudioManager.Instance?.PlayGoodPiecePlacedVO();
+        }
+    }
+
+    // -------------------------------------------------------------------------
 
     private void OnDestroy()
     {

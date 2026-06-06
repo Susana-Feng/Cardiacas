@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -10,12 +11,23 @@ public class GameAudioManager : MonoBehaviour
 {
     public static GameAudioManager Instance { get; private set; }
 
-    [Header("Audio Clips")]
+    [Header("Music Clips")]
     [Tooltip("Plays while the player is removing bad pieces.")]
     public AudioClip badPhaseMusic;
 
     [Tooltip("Plays when all bad pieces are gone and good pieces float in.")]
     public AudioClip goodPhaseMusic;
+
+    [Header("Phase Voiceovers")]
+    [Tooltip("Plays once when bad phase music starts (tutorial dismissed).")]
+    public AudioClip badPhaseStartVO;
+
+    [Tooltip("Plays once when good phase music starts (all bad pieces removed).")]
+    public AudioClip goodPhaseStartVO;
+
+    [Header("Good Piece Placed Voiceovers")]
+    [Tooltip("Played when a good piece is correctly placed. Picked randomly if multiple assigned.")]
+    public List<AudioClip> goodPiecePlacedVOs = new List<AudioClip>();
 
     [Header("Settings")]
     [Tooltip("How long crossfades take (seconds).")]
@@ -81,6 +93,9 @@ public class GameAudioManager : MonoBehaviour
     /// Called by TutoManager when a step becomes visible.
     /// Stops any currently playing voiceover and plays the new clip immediately.
     /// Pass null to just stop the current voiceover.
+    /// TutoManager should hold a List<AudioClip> frameVoiceovers and call:
+    ///     GameAudioManager.Instance?.PlayTutorialAudio(frameVoiceovers[currentStep]);
+    /// This method is reusable across all tutorial scenes — just populate the list per scene.
     /// </summary>
     public void PlayTutorialAudio(AudioClip clip)
     {
@@ -92,7 +107,10 @@ public class GameAudioManager : MonoBehaviour
         PlayOneShot(clip);
     }
 
-    /// <summary>Called by BadPieceManager when the tutorial UI dismisses.</summary>
+    /// <summary>
+    /// Called by BadPieceManager when the tutorial UI dismisses.
+    /// Starts bad-phase music and plays the bad phase start voiceover.
+    /// </summary>
     public void PlayBadPhaseMusic()
     {
         if (badPhaseMusic == null)
@@ -100,10 +118,20 @@ public class GameAudioManager : MonoBehaviour
             Debug.LogError("[GameAudioManager] badPhaseMusic is NULL — assign it in the Inspector.");
             return;
         }
+
         StartCoroutine(FadeInMusic(audioSourceA, badPhaseMusic, crossfadeDuration));
+
+        if (badPhaseStartVO != null)
+        {
+            if (audioSourceVO.isPlaying) audioSourceVO.Stop();
+            PlayOneShot(badPhaseStartVO);
+        }
     }
 
-    /// <summary>Called by BadPieceManager when all bad pieces are removed.</summary>
+    /// <summary>
+    /// Called by BadPieceManager when all bad pieces are removed.
+    /// Crossfades to good-phase music and plays the good phase start voiceover.
+    /// </summary>
     public void PlayGoodPhaseMusic()
     {
         if (goodPhaseMusic == null)
@@ -111,7 +139,29 @@ public class GameAudioManager : MonoBehaviour
             Debug.LogWarning("[GameAudioManager] No goodPhaseMusic assigned.");
             return;
         }
+
         StartCoroutine(CrossfadeMusic(audioSourceA, audioSourceB, goodPhaseMusic, crossfadeDuration));
+
+        if (goodPhaseStartVO != null)
+        {
+            if (audioSourceVO.isPlaying) audioSourceVO.Stop();
+            PlayOneShot(goodPhaseStartVO);
+        }
+    }
+
+    /// <summary>
+    /// Called by CorrectRotationPuzzle when a good piece is correctly placed.
+    /// Picks a random clip from goodPiecePlacedVOs. Safe to call if the list is empty.
+    /// </summary>
+    public void PlayGoodPiecePlacedVO()
+    {
+        if (goodPiecePlacedVOs == null || goodPiecePlacedVOs.Count == 0) return;
+
+        AudioClip clip = goodPiecePlacedVOs[Random.Range(0, goodPiecePlacedVOs.Count)];
+        if (clip == null) return;
+
+        if (audioSourceVO.isPlaying) audioSourceVO.Stop();
+        PlayOneShot(clip);
     }
 
     public void StopMusic(float fadeDuration = 1f)
