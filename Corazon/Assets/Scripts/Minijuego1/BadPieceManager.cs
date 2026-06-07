@@ -125,7 +125,18 @@ public class BadPieceManager : MonoBehaviour
                 createdTargets.Add(rotationTarget);
             }
 
-            obj.SetActive(true);  // ? AFTER targetSlot is assigned
+            obj.SetActive(true);
+
+            // Ignore collisions between this piece and all other good pieces
+            Collider[] thisColliders = obj.GetComponentsInChildren<Collider>();
+            for (int j = 0; j < goodPieces.Count; j++)
+            {
+                if (j == i || goodPieces[j] == null) continue;
+                Collider[] otherColliders = goodPieces[j].GetComponentsInChildren<Collider>();
+                foreach (var c1 in thisColliders)
+                    foreach (var c2 in otherColliders)
+                        Physics.IgnoreCollision(c1, c2, true);
+            }
 
             Vector3 targetPos = floatTargets.Count > 0
                 ? floatTargets[i % floatTargets.Count].position

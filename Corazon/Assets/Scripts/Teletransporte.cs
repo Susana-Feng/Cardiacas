@@ -27,8 +27,20 @@ public class Teletransportacion : MonoBehaviour
                 StartCoroutine(PlayArrivalAudioDelayed());
         }
     }
+    public void Teleport()
+    {
+        Vector3 cameraOffset = PlayerCamera.transform.position - ThePlayer.transform.position;
+        cameraOffset.y = 0;
+        ThePlayer.transform.position = Target.position - cameraOffset;
+        float camaraYaw = PlayerCamera.transform.eulerAngles.y;
+        float destinoYaw = Target.eulerAngles.y;
+        float deltaYaw = destinoYaw - camaraYaw;
+        ThePlayer.transform.Rotate(0, deltaYaw, 0, Space.World);
 
-    private IEnumerator PlayArrivalAudioDelayed()
+        if (arrivalAudio != null)
+            StartCoroutine(PlayArrivalAudioDelayed());
+    }
+    public IEnumerator PlayArrivalAudioDelayed()
     {
         yield return new WaitForSeconds(0.5f);
         GameAudioManager.Instance?.PlayIntroAudio(arrivalAudio);
