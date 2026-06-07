@@ -16,6 +16,9 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 [RequireComponent(typeof(Collider))]
 public class PuzzleSnapController : MonoBehaviour
 {
+    [Tooltip("Voiceover played through GameAudioManager when this piece is correctly placed.")]
+    public AudioClip placedVO;
+
     [Header("Puzzle Configuration")]
     [Tooltip("The exact GameObject that belongs in this slot.")]
     public GameObject correctPiece;
@@ -33,6 +36,10 @@ public class PuzzleSnapController : MonoBehaviour
 
     [Tooltip("Audio clip played on successful placement.")]
     public AudioClip successSound;
+
+    [Tooltip("Volume of the placement sound effect (0-1).")]
+    [Range(0f, 1f)]
+    public float successSoundVolume = 1f;
 
     // ── Internal state ──────────────────────────────────────────────────────
     private bool _isSolved = false;
@@ -153,8 +160,11 @@ public class PuzzleSnapController : MonoBehaviour
 
         if (_audioSource != null && successSound != null)
         {
-            _audioSource.PlayOneShot(successSound);
+            _audioSource.PlayOneShot(successSound, successSoundVolume);
         }
+
+        // Per-slot voiceover through the central audio manager
+        GameAudioManager.Instance?.PlayTutorialAudio(placedVO);
     }
 
     // ───────────────────────────────────────────────────────────────────────

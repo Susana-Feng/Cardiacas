@@ -62,8 +62,11 @@ public class PuzzleManager : MonoBehaviour
             _completed = true;
             _doorMoving = true;
             Debug.Log("[Puzzle] 🎉 Puzzle complete!");
+            GameAudioManager.Instance?.PlayPuzzleCompleteVO();
             StartCoroutine(CompletionSequence());
+            
             OnPuzzleComplete?.Invoke();
+            
         }
 
         if (_doorMoving && door != null)
@@ -83,7 +86,6 @@ public class PuzzleManager : MonoBehaviour
     }
 
     // -------------------------------------------------------------------------
-
     private IEnumerator CompletionSequence()
     {
         yield return new WaitForSeconds(1f);
@@ -91,21 +93,22 @@ public class PuzzleManager : MonoBehaviour
         // Scale down objects to hide
         yield return StartCoroutine(ScaleObjects(objectsToDisappear, scaleDown: true));
 
-        // Deactivate them once shrunk
         if (objectsToDisappear != null)
             foreach (var obj in objectsToDisappear)
                 if (obj != null) obj.SetActive(false);
 
-        // Activate and scale up objects to show
+        // Activate and scale up objects to show (including button if you add it there)
         if (objectsToAppear != null)
             foreach (var obj in objectsToAppear)
                 if (obj != null)
                 {
-                    obj.transform.localScale = Vector3.zero;
+                    if (_originalScales.TryGetValue(obj, out Vector3 originalScale))
+                        obj.transform.localScale = originalScale;
                     obj.SetActive(true);
                 }
 
         yield return StartCoroutine(ScaleObjects(objectsToAppear, scaleDown: false));
+
     }
 
     // -------------------------------------------------------------------------

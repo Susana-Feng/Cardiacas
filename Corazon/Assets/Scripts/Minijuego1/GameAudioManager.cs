@@ -33,6 +33,10 @@ public class GameAudioManager : MonoBehaviour
     [Tooltip("How long crossfades take (seconds).")]
     public float crossfadeDuration = 1.5f;
 
+    [Header("Puzzle Complete")]
+    public AudioClip puzzleCompleteVO;
+    public AudioClip puzzleCompleteVO2;
+
     [Range(0f, 1f)]
     public float musicVolume = 1f;
 
@@ -143,10 +147,14 @@ public class GameAudioManager : MonoBehaviour
         StartCoroutine(CrossfadeMusic(audioSourceA, audioSourceB, goodPhaseMusic, crossfadeDuration));
 
         if (goodPhaseStartVO != null)
-        {
-            if (audioSourceVO.isPlaying) audioSourceVO.Stop();
-            PlayOneShot(goodPhaseStartVO);
-        }
+            StartCoroutine(PlayGoodPhaseVODelayed());
+    }
+
+    private IEnumerator PlayGoodPhaseVODelayed()
+    {
+        yield return new WaitForSeconds(1f);
+        if (audioSourceVO.isPlaying) audioSourceVO.Stop();
+        PlayOneShot(goodPhaseStartVO);
     }
 
     /// <summary>
@@ -241,4 +249,29 @@ public class GameAudioManager : MonoBehaviour
         source.Stop();
         source.volume = 0f;
     }
+
+    public void PlayPuzzleCompleteVO()
+    {
+        StopMusic();
+        StartCoroutine(PlayAfterFade());
+    }
+
+    private IEnumerator PlayAfterFade()
+    {
+        yield return new WaitForSeconds(crossfadeDuration);
+
+        if (puzzleCompleteVO != null)
+        {
+            if (audioSourceVO.isPlaying) audioSourceVO.Stop();
+            PlayOneShot(puzzleCompleteVO);
+
+            // Wait for it to finish, then play the second one
+            if (puzzleCompleteVO2 != null)
+            {
+                yield return new WaitForSeconds(puzzleCompleteVO.length+ 0.5f);
+                PlayOneShot(puzzleCompleteVO2);
+            }
+        }
+    }
+
 }

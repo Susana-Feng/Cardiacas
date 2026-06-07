@@ -57,6 +57,10 @@ public class BadPieceManager : MonoBehaviour
         foreach (var bp in badPieces)
             if (bp != null) remaining++;
 
+        // Hide good pieces until bad phase is over
+        foreach (var gp in goodPieces)
+            if (gp != null) gp.SetActive(false);
+
         Debug.Log($"[BadPieceManager] Ready. {remaining} bad piece(s), {goodPieces.Count} good piece(s).");
 
         if (tutorialObject == null)
@@ -96,13 +100,12 @@ public class BadPieceManager : MonoBehaviour
     private IEnumerator FloatGoodPiecesIn()
     {
         Debug.Log("[BadPieceManager] Floating good pieces in!");
-
         GameAudioManager.Instance?.PlayGoodPhaseMusic();
 
         for (int i = 0; i < goodPieces.Count; i++)
         {
             GameObject obj = goodPieces[i];
-            if (obj == null) continue;
+            if (obj == null) continue;  // ? null check FIRST
 
             var rotationPuzzle = obj.GetComponent<CorrectRotationPuzzle>();
             if (rotationPuzzle == null)
@@ -111,7 +114,7 @@ public class BadPieceManager : MonoBehaviour
                 continue;
             }
 
-            // Create a rotation target if none assigned
+            // Assign targetSlot BEFORE activating so Awake() doesn't fail
             if (rotationPuzzle.targetSlot == null)
             {
                 GameObject rotationTarget = new GameObject($"{obj.name}_RotationTarget");
@@ -120,14 +123,14 @@ public class BadPieceManager : MonoBehaviour
                 rotationTarget.transform.rotation = Quaternion.Euler(0, 270, 0);
                 rotationPuzzle.targetSlot = rotationTarget.transform;
                 createdTargets.Add(rotationTarget);
-                Debug.Log($"[BadPieceManager] Created rotation target for '{obj.name}'");
             }
+
+            obj.SetActive(true);  // ? AFTER targetSlot is assigned
 
             Vector3 targetPos = floatTargets.Count > 0
                 ? floatTargets[i % floatTargets.Count].position
                 : obj.transform.position + Vector3.up * 1.2f;
 
-            // Add animator component and initialize it
             var animator = obj.AddComponent<PieceFloatAnimator>();
             animator.lerpSpeed = lerpSpeed;
             animator.arrivalThreshold = arrivalThreshold;
