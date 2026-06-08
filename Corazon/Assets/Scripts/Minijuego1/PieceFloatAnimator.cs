@@ -14,7 +14,7 @@ public class PieceFloatAnimator : MonoBehaviour
     public float arrivalThreshold = 0.015f;
     public float hoverAmplitude = 0.04f;
     public float hoverFrequency = 1.1f;
-
+    public bool enableHovering = true;
     [Header("Rotation Settings")]
     public bool applyRotationDuringFloat = true;
     public float hoverRotationSpeed = 15f;
@@ -30,7 +30,8 @@ public class PieceFloatAnimator : MonoBehaviour
     private Quaternion targetRotation;
 
     // -------------------------------------------------------------------------
-
+    [Header("Behaviour")]
+    public bool returnToFloatOnRelease = true;
     /// <summary>
     /// Call this once after the piece is set up to begin floating it to its target position.
     /// </summary>
@@ -182,7 +183,16 @@ public class PieceFloatAnimator : MonoBehaviour
     {
         if (isSnapped) return;
         isHeld = false;
-        StartCoroutine(ReturnToFloat(transform.position));
+
+        if (enableHovering && returnToFloatOnRelease)
+            StartCoroutine(ReturnToFloat(transform.position));
+
+        // If hovering disabled, just restore gravity so it drops normally
+        if (!enableHovering && rb != null)
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -190,6 +200,7 @@ public class PieceFloatAnimator : MonoBehaviour
     private void Update()
     {
         if (isHeld || isSnapped) return;
+        if (!enableHovering) return;
 
         // Mark as snapped if the grab interactable was disabled externally (by CorrectRotationPuzzle)
         if (grab != null && !grab.enabled)

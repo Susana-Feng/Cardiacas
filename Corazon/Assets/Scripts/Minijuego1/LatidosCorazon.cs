@@ -31,6 +31,18 @@ public class HeartBeat : MonoBehaviour
     private BeatPhase _phase = BeatPhase.Rest;
     private float _phaseTimer;
 
+    public static HeartBeat Instance { get; private set; }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    public void Stop()
+    {
+        _audioSource?.Stop();
+        enabled = false; // stops Update from playing more beats
+    }
     private void Start()
     {
         if (BadPieceManager.Instance != null)

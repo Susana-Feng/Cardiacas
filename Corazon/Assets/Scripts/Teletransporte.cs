@@ -37,6 +37,8 @@ public class Teletransportacion : MonoBehaviour
         float deltaYaw = destinoYaw - camaraYaw;
         ThePlayer.transform.Rotate(0, deltaYaw, 0, Space.World);
 
+        GameAudioManager.Instance?.StopAll();
+
         if (arrivalAudio != null)
             StartCoroutine(PlayArrivalAudioDelayed());
     }

@@ -43,6 +43,8 @@ public class GameAudioManager : MonoBehaviour
     [Range(0f, 1f)]
     public float voiceVolume = 1f;
 
+    private GameObject musicHost; // ? add this field
+
     // -------------------------------------------------------------------------
 
     private AudioSource audioSourceA;   // music channel 1
@@ -55,6 +57,7 @@ public class GameAudioManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+
 
         GameObject musicHost = new GameObject("MusicHost");
         musicHost.transform.SetParent(null);
@@ -272,6 +275,24 @@ public class GameAudioManager : MonoBehaviour
                 PlayOneShot(puzzleCompleteVO2);
             }
         }
+    }
+    public void StopAll()
+    {
+        Debug.Log("[GameAudioManager] StopAll called");
+        StopAllCoroutines();
+
+        audioSourceA.Stop();
+        audioSourceA.volume = 0f;
+        audioSourceA.clip = null;
+
+        audioSourceB.Stop();
+        audioSourceB.volume = 0f;
+        audioSourceB.clip = null;
+
+        audioSourceVO.Stop();
+        audioSourceVO.clip = null;
+
+        HeartBeat.Instance?.Stop(); // ? add this
     }
 
 }
