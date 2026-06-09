@@ -35,7 +35,11 @@ public class Teletransportacion : MonoBehaviour
     {
         Vector3 cameraOffset = PlayerCamera.transform.position - ThePlayer.transform.position;
         cameraOffset.y = 0;
-        ThePlayer.transform.position = Target.position - cameraOffset;
+
+        Vector3 newPosition = Target.position - cameraOffset;
+        newPosition.y = ThePlayer.transform.position.y; // ? preserve current height
+        ThePlayer.transform.position = newPosition;
+
         float camaraYaw = PlayerCamera.transform.eulerAngles.y;
         float destinoYaw = Target.eulerAngles.y;
         float deltaYaw = destinoYaw - camaraYaw;
@@ -43,10 +47,10 @@ public class Teletransportacion : MonoBehaviour
 
         GameAudioManager.Instance?.StopAll();
         IntroOutroManager.Instance?.OnTeleportedToGame();
+
         if (arrivalAudio != null)
             StartCoroutine(PlayArrivalAudioDelayed());
 
-        // If this is the outro portal, kick off the outro sequence
         if (outroVO1 != null)
             IntroOutroManager.Instance?.StartOutro(outroVO1.length);
     }

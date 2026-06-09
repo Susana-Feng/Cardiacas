@@ -245,7 +245,8 @@ public class WaveManager : MonoBehaviour
     private IEnumerator ShowFinalObject()
     {
         if (finalObject == null) yield break;
-
+          Debug.Log("[WaveManager] Final object fully visible.");
+        GameAudioManager.Instance?.PlayTutorialAudio(finalObjectVO);
         var renderers = finalObject.GetComponentsInChildren<Renderer>();
         var originalColors = new Color[renderers.Length];
 
@@ -283,8 +284,7 @@ public class WaveManager : MonoBehaviour
             mat.color = originalColors[i];
         }
 
-        Debug.Log("[WaveManager] Final object fully visible.");
-        GameAudioManager.Instance?.PlayTutorialAudio(finalObjectVO);
+
     }
 
 
