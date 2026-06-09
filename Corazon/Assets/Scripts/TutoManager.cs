@@ -223,12 +223,7 @@ namespace Unity.VRTemplate
         public void OnIniciarPartidaRealPressed()
         {
             deactivateObject();
-            if (lanzadorObjetos != null)
-            {
-                Debug.Log("Iniciando partida de 60 segundos");
-                timer.IniciarContador(60f);
-                lanzadorObjetos.Relanzar(60f);
-            }
+            StartCoroutine(IniciarPartidaRealConConteo());
         }
 
         // -------------------------------------------------------------------------
@@ -258,17 +253,47 @@ namespace Unity.VRTemplate
             }
             else if (lanzadorObjetos != null)
             {
-                if (conteoRegresivo != null)
+                if (conteoRegresivo != null && conteoRegresivo.clip != null)
+                {
                     conteoRegresivo.Play();
+                    // Esperar la duración real del clip
+                    yield return new WaitForSeconds(conteoRegresivo.clip.length);
+                }
                 else
-                    Debug.LogWarning("AudioSource conteoRegresivo no asignado.");
-
-                yield return new WaitForSeconds(3f);
+                {
+                    Debug.LogWarning("AudioSource conteoRegresivo no asignado o sin clip.");
+                    yield return new WaitForSeconds(3f); // fallback
+                }
 
                 Debug.Log("Iniciando partida de 30 segundos");
                 timer.IniciarContador(30f);
                 lanzadorObjetos.Relanzar(30f);
                 StartCoroutine(ActivarDespues(30f));
+            }
+            else
+            {
+                Debug.LogWarning("No se asignó el SegundoScript en el Inspector.");
+            }
+        }
+
+        private IEnumerator IniciarPartidaRealConConteo()
+        {
+            if (lanzadorObjetos != null)
+            {
+                if (conteoRegresivo != null && conteoRegresivo.clip != null)
+                {
+                    conteoRegresivo.Play();
+                    // Esperar la duración real del clip
+                    yield return new WaitForSeconds(conteoRegresivo.clip.length);
+                }
+                else
+                {
+                    Debug.LogWarning("AudioSource conteoRegresivo no asignado o sin clip.");
+                    yield return new WaitForSeconds(3f); // fallback
+                }
+                Debug.Log("Iniciando partida de 60 segundos");
+                timer.IniciarContador(60f);
+                lanzadorObjetos.Relanzar(60f);
             }
             else
             {

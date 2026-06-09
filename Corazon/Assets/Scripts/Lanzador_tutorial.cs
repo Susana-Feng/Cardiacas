@@ -28,6 +28,12 @@ public class LanzadorTutorial : MonoBehaviour
     [Header("Efecto de confetti")]
     public GameObject confettiEffect;
 
+    [Header("Audios")]
+    public AudioClip audio1; // Suena al lanzar el objeto 1
+    public AudioClip audio2; // Suena al lanzar el objeto 2
+    public AudioClip audio3; // Suena cuando el objeto 1 es agarrado
+
+    private AudioSource audioSource;
     private Vector3[] posicionesIniciales;
     private bool objeto1Desactivado = false;
 
@@ -44,6 +50,11 @@ public class LanzadorTutorial : MonoBehaviour
             if (componente != null)
                 componente.SetActive(false);
         }
+
+        // Obtener o agregar AudioSource
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     public void Relanzar()
@@ -69,6 +80,9 @@ public class LanzadorTutorial : MonoBehaviour
                 rb1.linearVelocity = Vector3.zero;
                 rb1.angularVelocity = Vector3.zero;
 
+                // Reproducir audio 1 al lanzar el objeto 1
+                ReproducirAudio(audio1);
+
                 float fuerza1 = Mathf.Sqrt(2f * Physics.gravity.magnitude * alturaMaxima);
                 rb1.AddForce(Vector3.up * fuerza1, ForceMode.VelocityChange);
 
@@ -76,9 +90,17 @@ public class LanzadorTutorial : MonoBehaviour
             }
         }
 
-        // --- ESPERAR A QUE EL OBJETO 1 SEA DESACTIVADO ---
+        // --- ESPERAR A QUE EL OBJETO 1 SEA DESACTIVADO (agarrado) ---
+        // OnGrabbed y OnGrabbedCorrecto ya reproducen audio3 y setean objeto1Desactivado = true
         yield return new WaitUntil(() => objeto1Desactivado);
-        Debug.Log("Objeto 1 desactivado, esperando offset...");
+        Debug.Log("Objeto 1 agarrado, esperando que termine el audio 3...");
+
+        // --- ESPERAR A QUE TERMINE EL AUDIO 3 ANTES DE LANZAR EL OBJETO 2 ---
+        if (audioSource != null && audioSource.isPlaying)
+        {
+            yield return new WaitUntil(() => !audioSource.isPlaying);
+        }
+        Debug.Log("Audio 3 terminado, esperando offset...");
 
         // --- OFFSET ANTES DE LANZAR OBJETO 2 ---
         yield return new WaitForSeconds(offsetEsperaObjeto2);
@@ -98,12 +120,23 @@ public class LanzadorTutorial : MonoBehaviour
                 rb2.linearVelocity = Vector3.zero;
                 rb2.angularVelocity = Vector3.zero;
 
+                // Reproducir audio 2 al lanzar el objeto 2
+                ReproducirAudio(audio2);
+
                 float fuerza2 = Mathf.Sqrt(2f * Physics.gravity.magnitude * alturaMaxima);
                 rb2.AddForce(Vector3.up * fuerza2, ForceMode.VelocityChange);
 
                 yield return StartCoroutine(SubirYCongelarAlBajar(obj2, rb2, alturaCongeladoObjeto2));
 
-                Debug.Log($"Objeto 2 congelado, esperando {tiempoCongeladoObjeto2} segundos...");
+                Debug.Log($"Objeto 2 congelado, esperando a que termine el audio 2 y luego {tiempoCongeladoObjeto2} segundos...");
+
+                // --- ESPERAR A QUE TERMINE EL AUDIO 2 ANTES DE DEJAR CAER EL OBJETO 2 ---
+                if (audioSource != null && audioSource.isPlaying)
+                {
+                    yield return new WaitUntil(() => !audioSource.isPlaying);
+                }
+
+                // Espera adicional configurada en el inspector
                 yield return new WaitForSeconds(tiempoCongeladoObjeto2);
 
                 // Descongelar y dejar caer
@@ -154,11 +187,9 @@ public class LanzadorTutorial : MonoBehaviour
             {
                 if (obj != null)
                 {
-                    // Activar el GameObject
                     obj.SetActive(true);
                     Debug.Log($"Objeto activado: {obj.name}");
 
-                    // Activar SkinnedMeshRenderer si existe
                     SkinnedMeshRenderer smr = obj.GetComponent<SkinnedMeshRenderer>();
                     if (smr != null)
                     {
@@ -166,7 +197,6 @@ public class LanzadorTutorial : MonoBehaviour
                         Debug.Log($"SkinnedMeshRenderer activado en: {obj.name}");
                     }
 
-                    // Buscar hijo llamado "CoachingCardRoot" y activarlo
                     Transform child = obj.transform.Find("CoachingCardRoot");
                     if (child != null)
                     {
@@ -182,12 +212,24 @@ public class LanzadorTutorial : MonoBehaviour
         }
     }
 
+    private void ReproducirAudio(AudioClip clip)
+    {
+        if (audioSource != null && clip != null)
+        {
+            audioSource.Stop();
+            audioSource.clip = clip;
+            audioSource.Play();
+        }
+    }
+
     public void OnGrabbed(SelectEnterEventArgs args)
     {
         GameObject grabbedObject = args.interactableObject.transform.gameObject;
 
         if (objetos.Length > 0 && grabbedObject == objetos[0])
         {
+            // Reproducir audio 3 cuando el objeto 1 es agarrado
+            ReproducirAudio(audio3);
             objeto1Desactivado = true;
         }
 
@@ -200,13 +242,9 @@ public class LanzadorTutorial : MonoBehaviour
 
         if (confettiEffect != null)
         {
-            // Mover el efecto a la posición del objeto
             confettiEffect.transform.position = grabbedObject.transform.position;
-
-            // Activar el efecto
             confettiEffect.SetActive(true);
 
-            // Desactivarlo cuando termine la partícula
             ParticleSystem ps = confettiEffect.GetComponent<ParticleSystem>();
             if (ps != null)
                 StartCoroutine(DesactivarEfectoConfetti(ps.main.duration));
@@ -214,6 +252,8 @@ public class LanzadorTutorial : MonoBehaviour
 
         if (objetos.Length > 0 && grabbedObject == objetos[0])
         {
+            // Reproducir audio 3 cuando el objeto 1 es agarrado (versión correcta)
+            ReproducirAudio(audio3);
             objeto1Desactivado = true;
         }
 
