@@ -11,6 +11,10 @@ public class Teletransportacion : MonoBehaviour
     [Tooltip("Plays when the player enters this portal. Leave empty for no audio.")]
     public AudioClip arrivalAudio;
 
+    [Header("Outro")]
+    [Tooltip("If this portal leads to the outro scene, assign the outroVO1 clip here so the manager knows its duration.")]
+    public AudioClip outroVO1;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject == ThePlayer)
@@ -38,9 +42,13 @@ public class Teletransportacion : MonoBehaviour
         ThePlayer.transform.Rotate(0, deltaYaw, 0, Space.World);
 
         GameAudioManager.Instance?.StopAll();
-
+        IntroOutroManager.Instance?.OnTeleportedToGame();
         if (arrivalAudio != null)
             StartCoroutine(PlayArrivalAudioDelayed());
+
+        // If this is the outro portal, kick off the outro sequence
+        if (outroVO1 != null)
+            IntroOutroManager.Instance?.StartOutro(outroVO1.length);
     }
     public IEnumerator PlayArrivalAudioDelayed()
     {

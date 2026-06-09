@@ -37,10 +37,7 @@ public class GameAudioManager : MonoBehaviour
     public AudioClip puzzleCompleteVO;
     public AudioClip puzzleCompleteVO2;
 
-    [Range(0f, 1f)]
     public float musicVolume = 1f;
-
-    [Range(0f, 1f)]
     public float voiceVolume = 1f;
 
     private GameObject musicHost; // ? add this field
