@@ -110,27 +110,6 @@ public class LanzadorObjetos : MonoBehaviour
         grabbedObject.SetActive(false);
     }
 
-    public void OnGrabbedExplosion(SelectEnterEventArgs args)
-    {
-        GameObject grabbedObject = args.interactableObject.transform.gameObject;
-
-        if (explosionEffect != null)
-        {
-            // Mover el efecto a la posición del objeto
-            explosionEffect.transform.position = grabbedObject.transform.position;
-
-            // Activar el efecto
-            explosionEffect.SetActive(true);
-
-            // Desactivarlo cuando termine la partícula
-            ParticleSystem ps = explosionEffect.GetComponent<ParticleSystem>();
-            if (ps != null)
-                StartCoroutine(DesactivarEfecto(ps.main.duration));
-        }
-
-        grabbedObject.SetActive(false);
-    }
-
     private IEnumerator DesactivarEfecto(float tiempo)
     {
         yield return new WaitForSeconds(tiempo);
