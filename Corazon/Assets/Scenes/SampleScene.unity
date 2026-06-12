@@ -86549,8 +86549,8 @@ MonoBehaviour:
   - {fileID: 289446439}
   particles: {fileID: 1281585176}
   audioSource: {fileID: 0}
-  validSound: {fileID: 0}
-  invalidSound: {fileID: 0}
+  validSound: {fileID: 8300000, guid: 3f9a70353facd0248b624d79134c0f3f, type: 3}
+  invalidSound: {fileID: 8300000, guid: f4aba8dbaaa9a7c4a8e74889c353cf2f, type: 3}
   pointLight: {fileID: 132309194}
   lightDuration: 1
   validLightColor: {r: 1, g: 1, b: 0.3529412, a: 1}
@@ -93061,8 +93061,8 @@ MonoBehaviour:
   - {fileID: 692532674}
   particles: {fileID: 609840111}
   audioSource: {fileID: 0}
-  validSound: {fileID: 0}
-  invalidSound: {fileID: 0}
+  validSound: {fileID: 8300000, guid: 3f9a70353facd0248b624d79134c0f3f, type: 3}
+  invalidSound: {fileID: 8300000, guid: f4aba8dbaaa9a7c4a8e74889c353cf2f, type: 3}
   pointLight: {fileID: 307429436}
   lightDuration: 1
   validLightColor: {r: 1, g: 1, b: 0.3529412, a: 1}

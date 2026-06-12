@@ -9,24 +9,24 @@ public class Clasificacion : MonoBehaviour
     public ParticleSystem particles;
 
     [Header("Sonidos")]
-    public AudioSource audioSource; // fuente de audio
     public AudioClip validSound;    // sonido para objeto correcto
     public AudioClip invalidSound;  // sonido para objeto incorrecto
+    public float soundVolume = 1f;
 
     [Header("Efecto de luz")]
     public Light pointLight;        // referencia al Point Light
     public float lightDuration = 1f; // tiempo que dura encendido
     public Color validLightColor = Color.yellow; // color para objeto válido
     public Color invalidLightColor = Color.red;  // color para objeto inválido
+
     [Header("Wave")]
     public int waveNumber = 1;
+
     [Header("Rebote")]
     public float bounceForce = 6f;
 
     [Header("Destrucción")]
     public float destroyDelay = 0.5f;
-
-
 
     private int validCount = 0;
     private bool isFull = false;
@@ -38,9 +38,6 @@ public class Clasificacion : MonoBehaviour
         if (particles != null)
             particles.Stop();
 
-        if (audioSource == null)
-            audioSource = GetComponent<AudioSource>();
-
         if (pointLight != null)
             pointLight.gameObject.SetActive(false); // luz apagada al inicio
     }
@@ -48,6 +45,7 @@ public class Clasificacion : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log($"[Clasificacion] Trigger entered by: {other.gameObject.name}, valid: {IsValidObject(other.gameObject)}");
+
         bool valid = IsValidObject(other.gameObject);
 
         if (valid)
@@ -61,8 +59,7 @@ public class Clasificacion : MonoBehaviour
             }
 
             // Sonido de objeto válido
-            if (audioSource != null && validSound != null)
-                audioSource.PlayOneShot(validSound);
+            PlaySound2D(validSound);
 
             // Luz de objeto válido (amarillo configurable)
             if (pointLight != null)
@@ -75,14 +72,12 @@ public class Clasificacion : MonoBehaviour
 
             validCount++;
             WaveManager.Instance?.OnValidObjectPlaced();
-
             Destroy(other.gameObject, destroyDelay);
         }
         else
         {
             // Sonido de objeto inválido
-            if (audioSource != null && invalidSound != null)
-                audioSource.PlayOneShot(invalidSound);
+            PlaySound2D(invalidSound);
 
             // Luz de objeto inválido (rojo configurable)
             if (pointLight != null)
@@ -102,6 +97,19 @@ public class Clasificacion : MonoBehaviour
                 rb.AddForce(bounceDirection * bounceForce, ForceMode.Impulse);
             }
         }
+    }
+
+    private void PlaySound2D(AudioClip clip)
+    {
+        if (clip == null) return;
+
+        GameObject tempGO = new GameObject("TempAudio_" + clip.name);
+        AudioSource tempSource = tempGO.AddComponent<AudioSource>();
+        tempSource.clip = clip;
+        tempSource.volume = soundVolume;
+        tempSource.spatialBlend = 0f; // 2D, audible sin importar la posición
+        tempSource.Play();
+        Destroy(tempGO, clip.length);
     }
 
     private void DisableLight()
@@ -125,4 +133,3 @@ public class Clasificacion : MonoBehaviour
         isFull = false;
     }
 }
-
