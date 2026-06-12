@@ -21,6 +21,21 @@ public class LanzadorObjetos : MonoBehaviour
     [Header("Efecto de confetti")]
     public GameObject confettiEffect;
 
+    [Header("SFX Correcto")]
+    public AudioSource SFX_Correct_Source;
+    [SerializeField]
+    public AudioClip SFX_Correct;
+
+    [Header("SFX Incorrecto")]
+    public AudioSource SFX_Incorrect_Source;
+    [SerializeField]
+    public AudioClip SFX_Incorrect;
+
+    [Header("SFX Lanzamiento")]
+    public AudioSource SFX_Lanzamiento_Source;
+    [SerializeField]
+    public AudioClip SFX_Lanzamiento;
+
     private Vector3[] posicionesIniciales; // posiciones originales
     private int indiceActual = 0;
 
@@ -89,6 +104,8 @@ public class LanzadorObjetos : MonoBehaviour
                     rb.linearVelocity = Vector3.zero;
                     rb.angularVelocity = Vector3.zero;
 
+                    SFX_Lanzamiento_Source.Play();
+
                     float fuerza = Mathf.Sqrt(2f * Physics.gravity.magnitude * altura);
                     rb.AddForce(Vector3.up * fuerza, ForceMode.VelocityChange);
                 }
@@ -131,6 +148,9 @@ public class LanzadorObjetos : MonoBehaviour
             explosionEffect.SetActive(true);
             smokeEffect.SetActive(true);
 
+            // Reproducir el sonido incorrecto
+            SFX_Incorrect_Source.Play();
+
             // Desactivarlo cuando termine la partícula
             ParticleSystem ps = explosionEffect.GetComponent<ParticleSystem>();
             ParticleSystem psSmoke = smokeEffect.GetComponent<ParticleSystem>();
@@ -159,6 +179,9 @@ public class LanzadorObjetos : MonoBehaviour
 
             // Activar el efecto
             confettiEffect.SetActive(true);
+
+            // Reproducir el sonido correcto
+            SFX_Correct_Source.Play();
 
             // Desactivarlo cuando termine la partícula
             ParticleSystem ps = confettiEffect.GetComponent<ParticleSystem>();

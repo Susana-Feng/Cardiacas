@@ -191,8 +191,8 @@ namespace Unity.VRTemplate
         {
             if (m_CurrentStepIndex == 0)
                 Next();
-            else if (m_CurrentStepIndex == m_StepList.Count - 1)
-                Next();
+            //else if (m_CurrentStepIndex == m_StepList.Count - 1)
+                //Next();
             else
                 Previous();
         }
@@ -265,10 +265,10 @@ namespace Unity.VRTemplate
                     yield return new WaitForSeconds(3f); // fallback
                 }
 
-                Debug.Log("Iniciando partida de 30 segundos");
-                timer.IniciarContador(30f);
-                lanzadorObjetos.Relanzar(30f);
-                StartCoroutine(ActivarDespues(30f));
+                Debug.Log("Iniciando partida de 60 segundos");
+                timer.IniciarContador(60f);
+                lanzadorObjetos.Relanzar(60f);
+                //StartCoroutine(ActivarDespues(60f));
             }
             else
             {

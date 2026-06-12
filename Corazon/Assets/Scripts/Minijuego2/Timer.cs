@@ -8,8 +8,15 @@ public class Timer : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI textoContador;
 
-    [Header("Audio")]
-    public AudioSource audioSource; // <-- Asignar en el Inspector
+    [Header("SFX Fin de Partida")]
+    public AudioSource SFX_Fin_Partida; // <-- Asignar en el Inspector
+
+    [Header("LOC Fin de Partida")]
+    public AudioSource LOC_Fin_Partida;
+
+    [Header("Ir al Minijuego 3")]
+    [SerializeField]
+    GameObject irMinijuego3;
 
     private float tiempoRestante;
     private bool corriendo = false;
@@ -54,11 +61,29 @@ public class Timer : MonoBehaviour
 
     private void OnTiempoAgotado()
     {
-        Debug.Log("Tiempo agotado!");
+        GameManager2.Instance.gameWon = true;
+        StartCoroutine(FinPartida());
+    }
 
-        if (audioSource != null)
-            audioSource.Play();
-        else
-            Debug.LogWarning("AudioSource no asignado en el Inspector.");
+    private IEnumerator FinPartida()
+    {
+        if (SFX_Fin_Partida != null)
+        {
+            SFX_Fin_Partida.Play();
+
+            yield return new WaitForSeconds(SFX_Fin_Partida.clip.length);
+        }
+
+        if (LOC_Fin_Partida != null)
+        {
+            LOC_Fin_Partida.Play();
+
+            yield return new WaitForSeconds(LOC_Fin_Partida.clip.length);
+            
+            if (irMinijuego3 != null)
+            {
+                irMinijuego3.SetActive(true);
+            }
+        }
     }
 }
