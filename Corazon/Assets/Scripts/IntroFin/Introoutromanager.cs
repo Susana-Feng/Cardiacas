@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 /// <summary>
 /// Manages the intro and outro sequences of the experience.
@@ -95,6 +96,10 @@ public class IntroOutroManager : MonoBehaviour
     [Header("Blink — Objects To Reveal")]
     [Tooltip("Objects that will be set active during the blink (while screen is covered).")]
     public GameObject[] objectsToReveal;
+
+    [Header("Blink — Objects To Unreveal")]
+    [Tooltip("Objects that will be set unactive during the blink (while screen is covered).")]
+    public GameObject[] objectsToUnreveal;
 
     [Header("Blink — Objects To Rotate")]
     [Tooltip("Objects that will be instantly rotated to a new rotation during the blink.")]
@@ -326,6 +331,15 @@ public class IntroOutroManager : MonoBehaviour
             }
         }
 
+        if (objectsToUnreveal != null)
+        {
+            foreach (GameObject obj in objectsToUnreveal)
+            {
+                if (obj != null)
+                    obj.SetActive(false);
+            }
+        }
+
         if (objectsToRotate != null)
         {
             for (int i = 0; i < objectsToRotate.Length; i++)
@@ -464,5 +478,27 @@ public class IntroOutroManager : MonoBehaviour
         }
         source.Stop();
         source.volume = 0f;
+    }
+
+    // -------------------------------------------------------------------------
+    public void CuartoOrdenado()
+    {
+        if (objectsToReveal != null)
+        {
+            foreach (GameObject obj in objectsToReveal)
+            {
+                if (obj != null)
+                    DestroyImmediate(obj);
+            }
+        }
+
+        if (objectsToUnreveal != null)
+        {
+            foreach (GameObject obj in objectsToUnreveal)
+            {
+                if (obj != null)
+                    obj.SetActive(true);
+            }
+        }
     }
 }
