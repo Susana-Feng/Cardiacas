@@ -20,7 +20,6 @@ public class HeartBeat : MonoBehaviour
     public float volume = 1f;
     public float pitch = 1f;
 
-
     private AudioSource _audioSource;
     private float _beatInterval;
     private float _timer;
@@ -37,19 +36,19 @@ public class HeartBeat : MonoBehaviour
     {
         Instance = this;
     }
-
+    public void Resume()
+    {
+        if (_audioSource == null) return; // Start() hasn't run yet, nothing to resume
+        enabled = true;
+    }
     public void Stop()
     {
         _audioSource?.Stop();
-        enabled = false; // stops Update from playing more beats
+        enabled = false;
     }
+
     private void Start()
     {
-        if (BadPieceManager.Instance != null)
-        {
-            BadPieceManager.Instance.stopHeartbeat();
-        }
-
         _baseScaleVec = Vector3.one * baseScale;
         _peakScaleVec = Vector3.one * beatScale;
         _beatInterval = 60f / beatsPerMinute;
@@ -64,15 +63,17 @@ public class HeartBeat : MonoBehaviour
         _audioSource.pitch = pitch;
         _audioSource.clip = beatSound;
 
-        // 🔊 Configuración de sonido espacial
-        _audioSource.spatialBlend = 1f;   // sonido 3D
-        _audioSource.minDistance = 1f;    // volumen máximo a 1 unidad
-        _audioSource.maxDistance = 3f;    // deja de sonar a 3 unidades
+        // Sonido espacial
+        _audioSource.spatialBlend = 0f;
+        _audioSource.minDistance = 1f;
+        _audioSource.maxDistance = 3f;
 
-        // Curva de atenuación personalizada: volumen 1 en minDistance, 0 en maxDistance
+        // IMPORTANT: must set rolloffMode to Custom or the curve below is ignored
+        _audioSource.rolloffMode = AudioRolloffMode.Custom;
+
         AnimationCurve rolloffCurve = new AnimationCurve();
-        rolloffCurve.AddKey(1f, 1f); // volumen completo en 1 unidad
-        rolloffCurve.AddKey(3f, 0f); // silencio total en 3 unidades
+        rolloffCurve.AddKey(1f, 1f);
+        rolloffCurve.AddKey(3f, 0f);
         _audioSource.SetCustomCurve(AudioSourceCurveType.CustomRolloff, rolloffCurve);
     }
 
@@ -137,6 +138,4 @@ public class HeartBeat : MonoBehaviour
         beatScale = Mathf.Max(baseScale, beatScale);
         pitch = Mathf.Clamp(pitch, 0.1f, 3f);
     }
-
 }
-

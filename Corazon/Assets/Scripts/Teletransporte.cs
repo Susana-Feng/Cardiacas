@@ -15,6 +15,10 @@ public class Teletransportacion : MonoBehaviour
     [Tooltip("If this portal leads to the outro scene, assign the outroVO1 clip here so the manager knows its duration.")]
     public AudioClip outroVO1;
 
+    [Header("Heart Room")]
+    [Tooltip("Check this on the portal that leads INTO the heart's room.")]
+    public bool resumeHeartbeatOnArrival = false;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject == ThePlayer)
@@ -45,12 +49,15 @@ public class Teletransportacion : MonoBehaviour
         float deltaYaw = destinoYaw - camaraYaw;
         ThePlayer.transform.Rotate(0, deltaYaw, 0, Space.World);
 
+
         GameAudioManager.Instance?.StopAll();
         IntroOutroManager.Instance?.OnTeleportedToGame();
 
+        if (resumeHeartbeatOnArrival)
+            HeartBeat.Instance?.Resume();
+
         if (arrivalAudio != null)
             StartCoroutine(PlayArrivalAudioDelayed());
-
         if (outroVO1 != null)
             IntroOutroManager.Instance?.StartOutro(outroVO1.length);
     }

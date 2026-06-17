@@ -10625,7 +10625,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -23761,6 +23761,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 1711860573}
   arrivalAudio: {fileID: 8300000, guid: 6cf05d3520f5efd498c35073f4a6a603, type: 3}
   outroVO1: {fileID: 8300000, guid: 6cf05d3520f5efd498c35073f4a6a603, type: 3}
+  resumeHeartbeatOnArrival: 0
 --- !u!1 &483181653
 GameObject:
   m_ObjectHideFlags: 0
@@ -29452,6 +29453,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 1711860573}
   arrivalAudio: {fileID: 0}
   outroVO1: {fileID: 0}
+  resumeHeartbeatOnArrival: 0
 --- !u!114 &574035603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30470,6 +30472,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 1711860573}
   arrivalAudio: {fileID: 8300000, guid: 75f4337f7cd66624e847523fd8e1c895, type: 3}
   outroVO1: {fileID: 0}
+  resumeHeartbeatOnArrival: 0
 --- !u!1 &592953637
 GameObject:
   m_ObjectHideFlags: 0
@@ -44753,6 +44756,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 1711860573}
   arrivalAudio: {fileID: 8300000, guid: f274b6fe53ad72548b93f445f2c1e44e, type: 3}
   outroVO1: {fileID: 0}
+  resumeHeartbeatOnArrival: 0
 --- !u!114 &874670407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46344,6 +46348,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 1711860573}
   arrivalAudio: {fileID: 8300000, guid: f274b6fe53ad72548b93f445f2c1e44e, type: 3}
   outroVO1: {fileID: 0}
+  resumeHeartbeatOnArrival: 0
 --- !u!1 &896923322
 GameObject:
   m_ObjectHideFlags: 0
@@ -62879,6 +62884,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 0}
   arrivalAudio: {fileID: 0}
   outroVO1: {fileID: 0}
+  resumeHeartbeatOnArrival: 0
 --- !u!114 &1230078291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79593,6 +79599,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 0}
   arrivalAudio: {fileID: 0}
   outroVO1: {fileID: 0}
+  resumeHeartbeatOnArrival: 0
 --- !u!1 &1491074556
 GameObject:
   m_ObjectHideFlags: 0
@@ -87571,6 +87578,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 1711860573}
   arrivalAudio: {fileID: 8300000, guid: 9ccdee6aa221fa04795ce08aebe5e82c, type: 3}
   outroVO1: {fileID: 0}
+  resumeHeartbeatOnArrival: 1
 --- !u!1 &1650254988
 GameObject:
   m_ObjectHideFlags: 0
@@ -89198,6 +89206,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 1711860573}
   arrivalAudio: {fileID: 8300000, guid: 9ccdee6aa221fa04795ce08aebe5e82c, type: 3}
   outroVO1: {fileID: 0}
+  resumeHeartbeatOnArrival: 0
 --- !u!114 &1685620832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96483,6 +96492,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 1711860573}
   arrivalAudio: {fileID: 0}
   outroVO1: {fileID: 0}
+  resumeHeartbeatOnArrival: 0
 --- !u!114 &1863650179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99013,6 +99023,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 0}
   arrivalAudio: {fileID: 0}
   outroVO1: {fileID: 0}
+  resumeHeartbeatOnArrival: 0
 --- !u!114 &1918009631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113338,7 +113349,7 @@ Transform:
   m_GameObject: {fileID: 2119502653}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2177.0007, y: -208, z: 446.00015}
+  m_LocalPosition: {x: -2177.0007, y: -208, z: 212}
   m_LocalScale: {x: 100.00003, y: 100, z: 100.00003}
   m_ConstrainProportionsScale: 0
   m_Children: []
