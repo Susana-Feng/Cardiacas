@@ -28,6 +28,10 @@ public class Clasificacion : MonoBehaviour
     [Header("Destrucción")]
     public float destroyDelay = 0.5f;
 
+    [Header("Retorno a posición")]
+    [Tooltip("Tiempo de espera antes de que el objeto incorrecto flote de vuelta a su lugar.")]
+    public float returnDelay = 0.75f;
+
     private int validCount = 0;
     private bool isFull = false;
 
@@ -96,6 +100,9 @@ public class Clasificacion : MonoBehaviour
                 rb.linearVelocity = Vector3.zero;
                 rb.AddForce(bounceDirection * bounceForce, ForceMode.Impulse);
             }
+
+            // Float the misplaced object back to its correct wave slot after a short delay
+            WaveManager.Instance?.ReturnObjectToTarget(other.gameObject, returnDelay);
         }
     }
 

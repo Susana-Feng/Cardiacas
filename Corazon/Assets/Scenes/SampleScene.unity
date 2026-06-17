@@ -57163,6 +57163,7 @@ MonoBehaviour:
   lerpSpeed: 1.5
   minFloatDuration: 1
   staggerDelay: 0.2
+  returnDelay: 0.75
   tutorialObject: {fileID: 835034607}
   door: {fileID: 0}
   doorOpenPosition: {x: 0, y: 0, z: 0}
@@ -78070,6 +78071,7 @@ MonoBehaviour:
   waveNumber: 1
   bounceForce: 6
   destroyDelay: 0
+  returnDelay: 0.75
 --- !u!1 &1462794443
 GameObject:
   m_ObjectHideFlags: 0
@@ -83348,6 +83350,7 @@ MonoBehaviour:
   waveNumber: 1
   bounceForce: 6
   destroyDelay: 0
+  returnDelay: 0.75
 --- !u!65 &1573166758
 BoxCollider:
   m_ObjectHideFlags: 0

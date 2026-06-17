@@ -46,6 +46,13 @@ public class WaveManager : MonoBehaviour
     [Tooltip("Delay between each object floating in.")]
     public float staggerDelay = 0.3f;
 
+    [Header("Return To Target")]
+    [Tooltip("Delay (seconds) before a misplaced object floats back to its slot, after touching ground or the wrong container.")]
+    public float returnDelay = 0.75f;
+
+    [Tooltip("World Y height below which an object is considered to have hit the floor. Adjust to match your floor's height.")]
+    public float groundY = -0.02f;
+
     [Header("Tutorial Gate")]
     [Tooltip("Wave 1 starts when the CoachingCardRoot child of this object is deactivated.")]
     public GameObject tutorialObject;
@@ -173,6 +180,25 @@ public class WaveManager : MonoBehaviour
 
             obj.SetActive(true);
 
+            // Ignore collisions between this object and all others in the same wave
+            Collider[] thisColliders = obj.GetComponentsInChildren<Collider>();
+            for (int j = 0; j < objects.Count; j++)
+            {
+                if (j == i || objects[j] == null) continue;
+                Collider[] otherColliders = objects[j].GetComponentsInChildren<Collider>();
+                foreach (var c1 in thisColliders)
+                    foreach (var c2 in otherColliders)
+                        Physics.IgnoreCollision(c1, c2, true);
+            }
+
+            // Ground-touch detection — floats the object back if it falls below groundY
+            if (obj.GetComponent<GroundContact>() == null)
+            {
+                var gc = obj.AddComponent<GroundContact>();
+                gc.returnDelay = returnDelay;
+                gc.groundY = groundY;
+            }
+
             Vector3 targetPos = targets != null && targets.Count > i && targets[i] != null
                 ? targets[i].position
                 : obj.transform.position + Vector3.up * 1.2f;
@@ -237,6 +263,11 @@ public class WaveManager : MonoBehaviour
             rb.constraints = RigidbodyConstraints.FreezeAll;
         }
 
+        // Allow this object to trigger a ground-return again later
+        var groundContact = obj.GetComponent<GroundContact>();
+        if (groundContact != null)
+            groundContact.ResetReturnState();
+
         Debug.Log($"[WaveManager] '{obj.name}' floated in and ready.");
     }
 
@@ -245,7 +276,7 @@ public class WaveManager : MonoBehaviour
     private IEnumerator ShowFinalObject()
     {
         if (finalObject == null) yield break;
-          Debug.Log("[WaveManager] Final object fully visible.");
+        Debug.Log("[WaveManager] Final object fully visible.");
         GameAudioManager.Instance?.PlayTutorialAudio(finalObjectVO);
         var renderers = finalObject.GetComponentsInChildren<Renderer>();
         var originalColors = new Color[renderers.Length];
@@ -328,5 +359,50 @@ public class WaveManager : MonoBehaviour
             StartCoroutine(ShowFinalObject());
             doorMoving = true;
         }
+    }
+
+    // -------------------------------------------------------------------------
+
+    /// <summary>
+    /// Finds the float target for a given object (checks both waves) and floats it back there.
+    /// Called by Clasificacion (wrong container) or GroundContact (touched floor).
+    /// </summary>
+    public void ReturnObjectToTarget(GameObject obj, float delay = 0.75f)
+    {
+        if (obj == null) return;
+
+        Vector3? targetPos = null;
+        Quaternion targetRot = obj.transform.rotation;
+
+        int idx = wave1Objects.IndexOf(obj);
+        if (idx >= 0 && wave1FloatTargets.Count > idx && wave1FloatTargets[idx] != null)
+        {
+            targetPos = wave1FloatTargets[idx].position;
+            targetRot = wave1FloatTargets[idx].rotation;
+        }
+        else
+        {
+            idx = wave2Objects.IndexOf(obj);
+            if (idx >= 0 && wave2FloatTargets.Count > idx && wave2FloatTargets[idx] != null)
+            {
+                targetPos = wave2FloatTargets[idx].position;
+                targetRot = wave2FloatTargets[idx].rotation;
+            }
+        }
+
+        if (targetPos == null)
+        {
+            Debug.LogWarning($"[WaveManager] No float target found for '{obj.name}' — can't return it.");
+            return;
+        }
+
+        StartCoroutine(ReturnAfterDelay(obj, targetPos.Value, targetRot, delay));
+    }
+
+    private IEnumerator ReturnAfterDelay(GameObject obj, Vector3 targetPos, Quaternion targetRot, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (obj == null) yield break;
+        StartCoroutine(FloatInOnly(obj, targetPos, targetRot));
     }
 }
