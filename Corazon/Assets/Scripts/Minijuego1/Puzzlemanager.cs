@@ -25,6 +25,8 @@ public class PuzzleManager : MonoBehaviour
     [Header("Completion Event")]
     public UnityEvent OnPuzzleComplete;
 
+    [SerializeField] private QuadImageSlideshow slideshow;
+
     private bool _completed = false;
     private bool _doorMoving = false;
 
@@ -63,6 +65,7 @@ public class PuzzleManager : MonoBehaviour
             _doorMoving = true;
             Debug.Log("[Puzzle] 🎉 Puzzle complete!");
             GameAudioManager.Instance?.PlayPuzzleCompleteVO();
+            slideshow.StartSlideshow();
             StartCoroutine(CompletionSequence());
             
             OnPuzzleComplete?.Invoke();

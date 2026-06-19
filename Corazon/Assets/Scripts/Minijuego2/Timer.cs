@@ -18,6 +18,9 @@ public class Timer : MonoBehaviour
     [SerializeField]
     GameObject irMinijuego3;
 
+    [SerializeField] private QuadImageSlideshow slideshow;
+    
+
     private float tiempoRestante;
     private bool corriendo = false;
 
@@ -62,6 +65,7 @@ public class Timer : MonoBehaviour
     private void OnTiempoAgotado()
     {
         GameManager2.Instance.gameWon = true;
+        slideshow.StartSlideshow();
         StartCoroutine(FinPartida());
     }
 

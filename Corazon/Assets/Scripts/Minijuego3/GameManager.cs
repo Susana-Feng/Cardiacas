@@ -5,13 +5,13 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public int totalContainers = 3;
     public Transform door;
+    public Transform doorOpenTarget;
     public float doorSpeed = 2f;
 
     private int filledContainers = 0;
     private bool gameWon = false;
-    private Vector3 doorOpenPos = new Vector3(13.24f, -0.02f, -18.28f);
 
-
+    [SerializeField] private QuadImageSlideshow slideshow;
 
     private void Awake()
     {
@@ -22,7 +22,10 @@ public class GameManager : MonoBehaviour
     {
         if (gameWon)
         {
-            door.position = Vector3.MoveTowards(door.position, doorOpenPos, Time.deltaTime * doorSpeed);
+            Vector3 currentPos = door.position;
+            float newZ = Mathf.MoveTowards(currentPos.z, doorOpenTarget.position.z, Time.deltaTime * doorSpeed);
+
+            door.position = new Vector3(currentPos.x, currentPos.y, newZ);
         }
     }
 
@@ -33,6 +36,7 @@ public class GameManager : MonoBehaviour
         {
             gameWon = true;
             Debug.Log("You win! Door opening.");
+            slideshow.StartSlideshow();
         }
     }
 
