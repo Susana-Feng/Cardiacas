@@ -106,6 +106,17 @@ public class LanzadorObjetos : MonoBehaviour
 
                     SFX_Lanzamiento_Source.Play();
 
+                    // Reproducir el AudioSource propio del objeto, si tiene uno
+                    AudioSource objetoAudioSource = objeto.GetComponent<AudioSource>();
+                    if (objetoAudioSource != null)
+                    {
+                        objetoAudioSource.Play();
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"El objeto '{objeto.name}' no tiene un componente AudioSource.");
+                    }
+
                     float fuerza = Mathf.Sqrt(2f * Physics.gravity.magnitude * altura);
                     rb.AddForce(Vector3.up * fuerza, ForceMode.VelocityChange);
                 }
