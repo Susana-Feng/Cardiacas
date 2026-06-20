@@ -110,6 +110,10 @@ public class LanzadorObjetos : MonoBehaviour
                     AudioSource objetoAudioSource = objeto.GetComponent<AudioSource>();
                     if (objetoAudioSource != null)
                     {
+                        if (!objetoAudioSource.enabled)
+                        {
+                            objetoAudioSource.enabled = true;
+                        }
                         objetoAudioSource.Play();
                     }
                     else
