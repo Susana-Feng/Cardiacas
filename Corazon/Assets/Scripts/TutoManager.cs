@@ -206,8 +206,12 @@ namespace Unity.VRTemplate
 
         public void OnBotonPresionado2()
         {
+            Debug.Log($"OnBotonPresionado2 llamado. CurrentStepIndex: {m_CurrentStepIndex}, ÚltimoStep: {m_StepList.Count - 1}");
+
             if (m_CurrentStepIndex == m_StepList.Count - 1)
+            {
                 OnIniciarButtonPressed();
+            }
             else
                 Next();
         }
@@ -224,6 +228,7 @@ namespace Unity.VRTemplate
         {
             Debug.Log("Iniciar button pressed - iniciando partida");
             deactivateObject();
+            StopCurrentStepAudio();
             StartCoroutine(IniciarConConteo());
         }
 
@@ -244,6 +249,15 @@ namespace Unity.VRTemplate
             var clip = m_StepList[m_CurrentStepIndex].stepAudio;
             if (clip != null)
                 GameAudioManager.Instance.PlayTutorialAudio(clip);
+        }
+
+        private void StopCurrentStepAudio()
+        {
+            if (GameAudioManager.Instance == null) return;
+            
+            var clip = m_StepList[m_CurrentStepIndex].stepAudio;
+            if (clip != null)
+                GameAudioManager.Instance.StopTutorialAudio(clip);
         }
 
         // -------------------------------------------------------------------------

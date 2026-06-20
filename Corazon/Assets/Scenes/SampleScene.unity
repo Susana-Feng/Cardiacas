@@ -10744,7 +10744,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -75357,6 +75357,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7201734671794354106, guid: 479e9ddb96b511c43be091e7d80ae2ac, type: 3}
   m_PrefabInstance: {fileID: 1325165299}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1325532358 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4494524748444649001, guid: fa5ef3b56cfeb4f4ba855cdf2610a578, type: 3}
+  m_PrefabInstance: {fileID: 547351841}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1327909800
 GameObject:
   m_ObjectHideFlags: 0
@@ -94260,7 +94265,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Unity.VRTemplate.TutoManager
   m_StepButtonTextField: {fileID: 279378266}
   m_StepButtonTextField2: {fileID: 0}
-  m_StepList: []
+  m_StepList:
+  - stepObject: {fileID: 1325532358}
+    buttonText: 
+    buttonText2: 
+    stepAudio: {fileID: 0}
   m_SecondButton: {fileID: 0}
   m_ObjectToDeactivate: {fileID: 1725321830}
   m_ObjectsToActivate:

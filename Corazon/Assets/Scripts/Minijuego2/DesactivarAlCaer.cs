@@ -4,8 +4,6 @@ public class DesactivarAlCaer : MonoBehaviour
 {
     [Header("SFX Caida")]
     public AudioSource SFX_Caida_Source;
-    [SerializeField]
-    public AudioClip SFX_Caida;
 
     private void OnCollisionEnter(Collision collision)
     {

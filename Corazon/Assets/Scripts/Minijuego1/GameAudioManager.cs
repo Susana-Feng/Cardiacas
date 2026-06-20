@@ -111,6 +111,13 @@ public class GameAudioManager : MonoBehaviour
         PlayOneShot(clip);
     }
 
+    public void StopTutorialAudio(AudioClip clip)
+    {
+        if (clip == null) return;
+
+        StopOneShot(clip);
+    }
+
     /// <summary>
     /// Called by BadPieceManager when the tutorial UI dismisses.
     /// Starts bad-phase music and plays the bad phase start voiceover.
@@ -192,6 +199,13 @@ public class GameAudioManager : MonoBehaviour
         audioSourceVO.clip = clip;
         audioSourceVO.volume = voiceVolume;
         audioSourceVO.Play();
+    }
+
+    private void StopOneShot(AudioClip clip)
+    {
+        Debug.Log($"StopOneShot llamado. isPlaying antes: {audioSourceVO.isPlaying}, clip actual: {audioSourceVO.clip?.name}");
+        audioSourceVO.Stop();
+        Debug.Log($"isPlaying después: {audioSourceVO.isPlaying}");
     }
 
     private IEnumerator FadeInMusic(AudioSource source, AudioClip clip, float duration)
