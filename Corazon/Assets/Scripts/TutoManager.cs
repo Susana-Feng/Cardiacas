@@ -187,6 +187,13 @@ namespace Unity.VRTemplate
             activateObjects();
         }
 
+        public void OnSecondButtonPressed2()
+        {
+            m_ObjectToDeactivate.SetActive(false);
+            activateObjects();
+            activateObjects();
+        }
+
         public void OnBotonPresionado1()
         {
             if (m_CurrentStepIndex == 0)

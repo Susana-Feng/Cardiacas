@@ -166,7 +166,7 @@ public class IntroOutroManager : MonoBehaviour
 
     private void Start()
     {
-        if (startButton != null) startButton.SetActive(true);
+        if (startButton != null) startButton.SetActive(false);
         if (tutorialObject != null) tutorialObject.SetActive(false);
         if (begin2Button != null) begin2Button.SetActive(false);
         if (nextButton != null) nextButton.SetActive(false);
