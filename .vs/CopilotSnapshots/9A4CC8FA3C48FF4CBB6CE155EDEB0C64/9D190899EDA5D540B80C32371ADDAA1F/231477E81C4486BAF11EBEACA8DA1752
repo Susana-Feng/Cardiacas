@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -58,7 +58,7 @@ public class IntroOutroManager : MonoBehaviour
     [Tooltip("Visible at start, pressing it begins the tutorial.")]
     public GameObject startButton;
 
-    [Tooltip("The tutorial object — hidden until start button is pressed.")]
+    [Tooltip("The tutorial object â€” hidden until start button is pressed.")]
     public GameObject tutorialObject;
 
     [Tooltip("Appears after tutorial dismisses alongside begin2VO.")]
@@ -93,22 +93,22 @@ public class IntroOutroManager : MonoBehaviour
     [Tooltip("How long the fade-in (eyes opening) takes.")]
     public float blinkFadeInDuration = 0.4f;
 
-    [Header("Blink — Objects To Reveal")]
+    [Header("Blink â€” Objects To Reveal")]
     [Tooltip("Objects that will be set active during the blink (while screen is covered).")]
     public GameObject[] objectsToReveal;
 
-    [Header("Blink — Objects To Unreveal")]
+    [Header("Blink â€” Objects To Unreveal")]
     [Tooltip("Objects that will be set unactive during the blink (while screen is covered).")]
     public GameObject[] objectsToUnreveal;
 
-    [Header("Blink — Objects To Rotate")]
+    [Header("Blink â€” Objects To Rotate")]
     [Tooltip("Objects that will be instantly rotated to a new rotation during the blink.")]
     public Transform[] objectsToRotate;
 
     [Tooltip("New rotation (Euler angles) applied to each object in objectsToRotate during the blink.")]
     public Vector3[] newRotations;
 
-    [Header("Blink — Lighting Change")]
+    [Header("Blink â€” Lighting Change")]
     [Tooltip("Light(s) whose color will change during the blink.")]
     public Light[] lightsToChangeColor;
 
@@ -134,9 +134,6 @@ public class IntroOutroManager : MonoBehaviour
 
     [Header("Outro Music")]
     public AudioClip outroMusic;
-
-    [SerializeField] private QuadMaterialSwitcher materialSwitcher1;
-    [SerializeField] private QuadMaterialSwitcher materialSwitcher2;
 
     // -------------------------------------------------------------------------
 
@@ -232,7 +229,7 @@ public class IntroOutroManager : MonoBehaviour
 
         if (begin2Button != null) begin2Button.SetActive(false);
         StartCoroutine(PostTutorialSequence());
-
+        QuadMaterialSwitcher.Instance?.SwitchToSecondMaterial(); // also switch the skybox material at this point
     }
 
     /// <summary>Called by the next button's OnClick (leads to Game 1).</summary>
@@ -303,7 +300,7 @@ public class IntroOutroManager : MonoBehaviour
     {
         if (blinkOverlay == null)
         {
-            // No overlay assigned — just apply changes instantly with no visual cover.
+            // No overlay assigned â€” just apply changes instantly with no visual cover.
             ApplyBlinkChanges();
             yield break;
         }
@@ -326,12 +323,6 @@ public class IntroOutroManager : MonoBehaviour
     /// <summary>Applies object reveals, rotations, and light color changes for the blink.</summary>
     private void ApplyBlinkChanges()
     {
-        if (materialSwitcher1 != null)
-            materialSwitcher1.SwitchToMaterial2();
-
-        if (materialSwitcher2 != null)
-            materialSwitcher2.SwitchToMaterial2();
-
         if (objectsToReveal != null)
         {
             foreach (GameObject obj in objectsToReveal)
@@ -399,7 +390,7 @@ public class IntroOutroManager : MonoBehaviour
 
     /// <summary>
     /// Call from Teletransportacion when the player arrives for the outro.
-    /// outroVO1 is already handled by Teletransportacion.PlayIntroAudio —
+    /// outroVO1 is already handled by Teletransportacion.PlayIntroAudio â€”
     /// pass its duration so this picks up right after.
     /// </summary>
     public void StartOutro(float outroVO1Duration)
