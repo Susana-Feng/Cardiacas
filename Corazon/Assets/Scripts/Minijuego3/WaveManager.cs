@@ -65,6 +65,9 @@ public class WaveManager : MonoBehaviour
     [Header("Open door position")]
     public Transform doorOpenTarget;
 
+    [Header("Quad of portal")]
+    [SerializeField] private QuadImageSlideshow slideshow;
+
     [Header("Audio")]
     [Tooltip("Plays when the final object appears.")]
     public AudioClip finalObjectVO;
@@ -116,6 +119,7 @@ public class WaveManager : MonoBehaviour
         // Move door when game is won
         if (doorMoving && door != null && doorOpenTarget != null)
         {
+            slideshow.StartSlideshow();
             float targetZ = doorOpenTarget.position.z;
             Vector3 targetPosition = new Vector3(door.position.x, door.position.y, targetZ);
 
