@@ -62,6 +62,9 @@ public class WaveManager : MonoBehaviour
     public Vector3 doorOpenPosition;
     public float doorSpeed = 2f;
 
+    [Header("Open door position")]
+    public Transform doorOpenTarget;
+
     [Header("Audio")]
     [Tooltip("Plays when the final object appears.")]
     public AudioClip finalObjectVO;
@@ -111,17 +114,20 @@ public class WaveManager : MonoBehaviour
         }
 
         // Move door when game is won
-        if (doorMoving && door != null)
+        if (doorMoving && door != null && doorOpenTarget != null)
         {
+            float targetZ = doorOpenTarget.position.z;
+            Vector3 targetPosition = new Vector3(door.position.x, door.position.y, targetZ);
+
             door.position = Vector3.MoveTowards(
                 door.position,
-                doorOpenPosition,
+                targetPosition,
                 doorSpeed * Time.deltaTime
             );
 
-            if (Vector3.Distance(door.position, doorOpenPosition) < 0.001f)
+            if (Vector3.Distance(door.position, targetPosition) < 0.001f)
             {
-                door.position = doorOpenPosition;
+                door.position = targetPosition;
                 doorMoving = false;
                 Debug.Log("[WaveManager] Door opened!");
             }
