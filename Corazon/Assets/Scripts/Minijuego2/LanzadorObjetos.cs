@@ -23,18 +23,12 @@ public class LanzadorObjetos : MonoBehaviour
 
     [Header("SFX Correcto")]
     public AudioSource SFX_Correct_Source;
-    [SerializeField]
-    public AudioClip SFX_Correct;
 
     [Header("SFX Incorrecto")]
     public AudioSource SFX_Incorrect_Source;
-    [SerializeField]
-    public AudioClip SFX_Incorrect;
 
     [Header("SFX Lanzamiento")]
     public AudioSource SFX_Lanzamiento_Source;
-    [SerializeField]
-    public AudioClip SFX_Lanzamiento;
 
     private Vector3[] posicionesIniciales; // posiciones originales
     private int indiceActual = 0;

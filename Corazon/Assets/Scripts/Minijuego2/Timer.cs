@@ -8,11 +8,17 @@ public class Timer : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI textoContador;
 
+    [Header("SFX Conteo de 3 segundos")]
+    public AudioSource SFX_Conteo_3_segundos;
+
     [Header("SFX Fin de Partida")]
     public AudioSource SFX_Fin_Partida; // <-- Asignar en el Inspector
 
     [Header("LOC Fin de Partida")]
     public AudioSource LOC_Fin_Partida;
+
+    [Header("LOC Ir a minijuego 3")]
+    public AudioSource LOC_Ir_Minijuego3;
 
     [Header("Ir al Minijuego 3")]
     [SerializeField]
@@ -40,11 +46,21 @@ public class Timer : MonoBehaviour
 
     private IEnumerator Contar()
     {
+        bool conteoReproducido = false; // flag para que solo suene una vez
+
         while (tiempoRestante > 0 && corriendo)
         {
             tiempoRestante -= Time.deltaTime;
             tiempoRestante = Mathf.Max(tiempoRestante, 0);
             ActualizarTexto();
+
+            // Suena una sola vez cuando quedan 3 segundos o menos
+            if (tiempoRestante <= 4f && !conteoReproducido && SFX_Conteo_3_segundos != null)
+            {
+                SFX_Conteo_3_segundos.Play();
+                conteoReproducido = true;
+            }
+
             yield return null;
         }
 
@@ -86,6 +102,7 @@ public class Timer : MonoBehaviour
             
             if (irMinijuego3 != null)
             {
+                LOC_Ir_Minijuego3.Play();
                 irMinijuego3.SetActive(true);
             }
         }

@@ -37,6 +37,12 @@ public class LanzadorTutorial : MonoBehaviour
     private Vector3[] posicionesIniciales;
     private bool objeto1Desactivado = false;
 
+    [Header("SFX Correcto")]
+    public AudioSource SFX_Correct_Source;
+
+    [Header("SFX Lanzamiento")]
+    public AudioSource SFX_Lanzamiento_Source;
+
     void Start()
     {
         posicionesIniciales = new Vector3[objetos.Length];
@@ -83,6 +89,7 @@ public class LanzadorTutorial : MonoBehaviour
                 // Reproducir audio 1 al lanzar el objeto 1
                 ReproducirAudio(audio1);
 
+                SFX_Lanzamiento_Source.Play();
                 float fuerza1 = Mathf.Sqrt(2f * Physics.gravity.magnitude * alturaMaxima);
                 rb1.AddForce(Vector3.up * fuerza1, ForceMode.VelocityChange);
 
@@ -122,6 +129,8 @@ public class LanzadorTutorial : MonoBehaviour
 
                 // Reproducir audio 2 al lanzar el objeto 2
                 ReproducirAudio(audio2);
+
+                SFX_Lanzamiento_Source.Play();
 
                 float fuerza2 = Mathf.Sqrt(2f * Physics.gravity.magnitude * alturaMaxima);
                 rb2.AddForce(Vector3.up * fuerza2, ForceMode.VelocityChange);
@@ -222,20 +231,6 @@ public class LanzadorTutorial : MonoBehaviour
         }
     }
 
-    public void OnGrabbed(SelectEnterEventArgs args)
-    {
-        GameObject grabbedObject = args.interactableObject.transform.gameObject;
-
-        if (objetos.Length > 0 && grabbedObject == objetos[0])
-        {
-            // Reproducir audio 3 cuando el objeto 1 es agarrado
-            ReproducirAudio(audio3);
-            objeto1Desactivado = true;
-        }
-
-        grabbedObject.SetActive(false);
-    }
-
     public void OnGrabbedCorrecto(SelectEnterEventArgs args)
     {
         GameObject grabbedObject = args.interactableObject.transform.gameObject;
@@ -244,6 +239,7 @@ public class LanzadorTutorial : MonoBehaviour
         {
             confettiEffect.transform.position = grabbedObject.transform.position;
             confettiEffect.SetActive(true);
+            SFX_Correct_Source.Play();
 
             ParticleSystem ps = confettiEffect.GetComponent<ParticleSystem>();
             if (ps != null)
