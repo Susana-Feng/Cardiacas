@@ -21,7 +21,7 @@
 - **Caja de pizza (vacía)** — "PIZZA BOX EMPTY DIRTY FREE" ([https://skfb.ly/oUPoo](https://skfb.ly/oUPoo)) by AMMediaGames — [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/)
 - **Caja de pizza (con pizza)** — "PIZZA AND PIZZA BOX FREE" ([https://skfb.ly/oUP8K](https://skfb.ly/oUP8K)) by AMMediaGames — [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/)
 - **Refresco** — "Soda Fountain Fast Food Cup" ([https://skfb.ly/6UWoN](https://skfb.ly/6UWoN)) by arctiem — [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/)
-- **Cup noodles** — "[Nissin Cup Noodles Chicken Flavour](https://sketchfab.com/3d-models/nissin-cup-noodles-chicken-flavour-9a3484de337a4028b2d49140e9f1fdfb)" — Sketchfab *(verificar licencia)*
+- **Cup noodles** — "[Nissin Cup Noodles Chicken Flavour](https://sketchfab.com/3d-models/nissin-cup-noodles-chicken-flavour-9a3484de337a4028b2d49140e9f1fdfb)" — Sketchfab — [CC Attribution-NonCommercial-ShareAlike](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 ---
 
@@ -31,9 +31,9 @@
 - **Manzana** — [Free Pack: Fruits](https://assetstore.unity.com/packages/3d/vegetation/plants/free-pack-fruits-368828) o [Match 3D Object Pack – Fruits & Vegetables](https://assetstore.unity.com/packages/3d/props/food/match-3d-object-pack-fruits-vegetables-284706) — Unity Asset Store
 - **Botella de agua** — "Bottle Of Water" ([https://skfb.ly/6VnAq](https://skfb.ly/6VnAq)) by ARCTIC WOLVES™ — [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/)
 - **Pesas de gimnasio** — [3D Dumbbell Free](https://assetstore.unity.com/packages/3d/props/3d-dumbbell-free-294391) — Unity Asset Store
-- **Lata de Red Bull** — "[Red Bull Can](https://sketchfab.com/3d-models/red-bull-can-c492f05c4bbf4d6e830a7f5684729979)" — Sketchfab *(verificar licencia)*
-- **Vape** — Sketchfab *(verificar licencia del modelo seleccionado)*
-- **Cup noodles (Maruchan)** — "[Nissin Cup Noodles Chicken Flavour](https://sketchfab.com/3d-models/nissin-cup-noodles-chicken-flavour-9a3484de337a4028b2d49140e9f1fdfb)" — Sketchfab *(verificar licencia)*
+- **Lata de Red Bull** — "[Red Bull Can](https://sketchfab.com/3d-models/red-bull-can-c492f05c4bbf4d6e830a7f5684729979)" — Sketchfab — [free standard](https://sketchfab.com/licenses)
+- **Vape** — [Vape-IT](https://sketchfab.com/3d-models/vape-it-fb601a53e5fa466fbda3e9a49b7008f1) — Sketchfab — [CC Attribution-NonCommercial-ShareAlike](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+- **Cup noodles (Maruchan)** — "[Nissin Cup Noodles Chicken Flavour](https://sketchfab.com/3d-models/nissin-cup-noodles-chicken-flavour-9a3484de337a4028b2d49140e9f1fdfb)" — [CC Attribution-NonCommercial-ShareAlike](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 ---
 
@@ -66,6 +66,3 @@
 ## Notas
 
 - Los assets de **Unity Asset Store** están sujetos a la [Unity Asset Store EULA](https://unity.com/legal/as-terms).
-- Los assets marcados con **CC BY 4.0** requieren atribución al autor original.
-- Los assets marcados con **CC BY-NC 4.0** no pueden usarse con fines comerciales.
-- Los assets sin licencia confirmada están marcados con *(verificar licencia)* — revisar antes de incluirlos en el build final.
