@@ -91,6 +91,10 @@ Bienvenida (Habitación de descanso)
 
 ---
 
+## 📄 Licencias y Créditos de Assets
+Los modelos 3D, texturas y assets de terceros utilizados en esta experiencia están documentados en [`docs/CREDITS.md`](docs/CREDITS.md).
+
+---
 ## 👥 Equipo
 
 
